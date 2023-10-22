@@ -1,0 +1,72 @@
+setcps(135/120/2)
+
+d1 
+$ spin 4 $ chop 8
+$ every 4 (chunk 2 (hurry 2))
+$ jux (# speed "-1")
+$ s "[<feel >*4, amencutup(5,8,<0 1 2>)]"
+# n (irand 16)
+# speed "[0.75, 0.752]"
+# nudge 0.2
+# room 0.15 # size 0.25
+# sus 0.223 # rel 0.224
+# djf (range 0.25 0.75 $ slow 16 $ sine)
+# orbit 1
+
+
+d1 
+$ degradeBy 0.85
+$ every 4 (0.25 <~ ) 
+$ sometimes (ply 2)
+$ every 4 (chunk 2 (hurry 2))
+$ s "[bass3*4, odx(3,8,<0 2 1>)]"
+# shape "0.25 0.5 0.75 0.89" # speed 0.665
+# gain 0.9
+
+hush
+
+d1 
+$ superimpose (# accelerate "0.2") 
+$ stack [ 
+ gain "{1 1*2 1 [~ 1] 1 1 ~ 1}%8" # s "bd:2" # shape 0.29, 
+sometimes (iter 4 ) $ stut' 3 0.125 (*| gain "0.9" ) $ s "~ sn:4" # n "1 2 4",
+s "~ hh27"
+]
+# room 0.25 # size 0.25
+# orbit 1
+ # speed "[1, 1.02, 0.98]" # gain 0.78
+# speed "0.75" 
+
+
+let notePat =  "c4 a4 c4 a4 e5 a5 e5 a4 f5 c5 f5 c5 g5 c5 <a5 <d6>> c5"
+
+xfadeIn 2 8
+$ slow 2
+$ striate 2. (#coarse "10")
+    $ note ( notePat)
+    # s "arpy"
+    # djf (range 0.25 0.75 $ slow 16 $ sine)
+    # speed "[1, 1.02, 0.98]"
+    # gain 1.1
+    # room 0.25 # size 0.25
+    # orbit 1
+
+
+d3
+      $ off 0.125 (+| n "1 ")
+      $ striate 2. (#coarse "10")
+      $ note "<c5 c5 a4 <f4 e4>>(3,8,<0 1 2>)"
+      #s "bass2:2"
+
+
+setcps(130/60/4)
+
+d1 $ s "rave*4"
+# n (wchoose [(0, 0.4), (1, 0.2), (7, 0.05), (2, 0.35)])
+
+hush
+
+1**2
+
+hush
+
