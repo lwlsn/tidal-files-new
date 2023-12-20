@@ -1,11 +1,129 @@
 setcps(160/120/2)
 
 xfadeIn 1 8
-$ spin 2
-$ ply 2 
-$ loopAt 4
-$ splice 64 " < 2 1*2 0*2 4 >*2" -- add 4 2 1 
-$ s "edits:1"
+    $ ply 2 $ spin 2
+    $ loopAt 8
+    $ off (0.125/2) (bite 6 " 0 2 3 1")  
+    $ bite 4 "0 2 1 3"
+    $ splice 64 "0..63"
+    $ s "edits:0"
+
+
+xfadeIn 1 8
+    $ ply 2 $ spin 2 
+    $ loopAt 8-- 8 to 16
+    $ off (0.125/2) (bite 6 " 0 2 3 1")  
+    $ bite 4 "0 2 1 3"
+    $ splice 64 "0..63"
+    $ s "edits:1"    
+
+
+
+do 
+    -- resetCycles
+    xfadeIn 1 16
+        $ loopAt 128 -- 64 to 128
+        $ splice 256 "0..255"
+        $ s "edits:2"
+        # lpf (8800)
+        # lpq 0.11
+
+do 
+    let mx = [1,1, 1]
+    d1 
+        $ s  "k [~ <~ k?>] ~  k ~ ~ "
+        # shape 0.69 
+        # gain 0.8
+        |*| gain (mx!!0)
+    d2  
+        $ whenmod 16 14 ((bite 7 "0*14"))
+        $ stack [
+            s "lhc(5,7,<0 2>)" # end 0.4 # speed "0.7"
+        ] # room 0.15 # orbit 1
+        |*| gain (mx!!1)
+    d3 
+        $ rarely (ply 2)
+        $ chunk 4 ( hurry 2)
+        $ speed "1(<5 <5 6 >>, 7)"
+        # s "{sn peri <lcp sn>}%<6 7 12  6> " # n (run 12)
+         # shape 0.99 # legato 1
+        |*| gain (mx!!2 * 0.75)
+  
+
+
+
+--- sev
+
+
+
+do 
+    xfadeIn 1 16
+        $ loopAt 16    $ spin 4
+        $ splice 128 "0..127"
+        $ s "edits:5"
+        # lpf (8800)
+        # lpq 0.11
+
+
+do 
+    let mx = [0.9,1,1]
+    d2 $ stack[
+            fast 1 $ s "[cp, k] krane krane:1 krane:4"
+        ] # gain (mx!!0)
+    d3 
+        $ rarely (ply 8. (#cut 2 ))
+        $ whenmod 4 3 (bite 4 "3 0 3 2" )
+        $ stack [
+            s "krane ~ krane:1 [~ krane:3] "
+        ] # gain (mx!!1)
+    d4 $ loopAt "4 4 2 4" $ splice 32 "0..31" $ s " lbreak" # n (irand 8)
+        # gain  (mx!!2)
+
+
+
+
+--- another one ? 
+do 
+    xfadeIn 1 16
+         --  $ rarely 
+        $ loopAt 8 
+        $ jux (|* speed "1.03")
+        $ whenmod 14 13 ( hurry 2)
+        $ splice 128 "0..127"
+        $ s "edits:6"
+        # lpf (8800)
+        # lpq 0.11
+
+
+
+do 
+    -- resetCycles
+    xfadeIn 1 8
+        -- $ spin 2
+        $ someCyclesBy 0.02 ((# accelerate "-0.2 0.08").(spin 2))
+        $ loopAt 128
+        $ splice 1024 "0..1023"
+        $ s "fff"
+        # lpf "4000"
+        # lpq "0.15"
+
+
+
+-- foans 
+
+setcps(157/120/2)
+
+d1 
+$ loopAt 8 
+$ splice 32 "0..31"
+$ s "foans" 
+# speed "[1, 1.02]"
+
+
+
+-- for ljubljana?
+
+
 
 
 xfadeIn 1 8
@@ -14,33 +132,40 @@ xfadeIn 1 8
     $ off (0.125/2) (bite 6 " 0 2 3 1")  
     $ bite 4 "0 2 1 3"
     $ splice 64 "0..63"
-    $ s "edits:0"
-
-d2 
-$ s "[bd, cp:2]*16"
-# shape 0.89 # gain 0.7
+    $ s "edits:3"  
 
 
- --
+d1
+$ loopAt 8
+$ splice 64 "0..63"
+$ s "edits:6"
+ |* gain "1.1"
+
+d2 $ s "[k, cp]*8" # shape 0.69 # gain 0.65
+
+
+d2 silence
 
 do
+    let legatoVal = 2.2
     d2  
         $ spreadf [ply 2 , (# accelerate "-0.2 0.2")]
         $ stack [
-            s "amencutup*16?" #  n (irand 16),
-            gain "{1*2 1 [~ 1] 1 ~ 1 ~ 1}%4" # s "bd"  # shape 0.92 # gain 0.8,
-            s "~ sn:2 ~ <cp cp*2>"    # shape 0.92 # gain 0.7 
-        ] 
+            gain "{1*2 1 1 1 1 1 1}%4" # s "k"  # shape 0.59 # gain 0.85,
+            s "~ sn:2 ~ <cp cp*2>"   # shape 0.92 # gain 0.7 
+        ] # legato (legatoVal-0.5)
+    d3  $ note "c4" # s "sub"
     d1 
         $ rarely (jux ((|* speed "0.5")))
         $ struct "t(<[11!3 <17 14>] 13>, 32)"
-        $ ( # begin (segment 32 $  range 0.25 0.5 $slow 8 $  saw )) 
-        $ loopAt 4
+        $ bite 4 "0 2 1 3"
+        $ ( # begin (segment 32 $  range 0.25 1.2 $ slow 8 $  saw )) 
+        $ loopAt "<4 4 8 8>"
         $ n 0
-        # s "edits"
+        # s "edits:6"
         # speed "[0.5 , 1]"
-        |* gain "1.2"
-        # legato 1.4
+        |* gain "1.1"
+        # legato (legatoVal)
 
 
 
@@ -58,3 +183,6 @@ let rslice x p = slice x (segment (toTime <$> x) $ ((>>= irand) x)) $ p
     rsplice x p = splice x (segment (toTime <$> x) $ ((>>= irand) x)) $ p 
 
 hush
+
+
+

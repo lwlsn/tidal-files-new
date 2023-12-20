@@ -1,0 +1,66 @@
+setcps(160/120/2)
+
+hush
+
+d1 $ sound "bd sn*8"
+# n (irand 8)
+# lpf "12300"
+# speed "3"
+
+
+d1 
+$ chop 112 $ spin 2
+$ splice 16 "0 2 8*8 2 3 ~ 21"
+$ gain "1 1 ~ 1 1*2 ~ ~ "
+# sound "cci"
+#speed "<[0.5, 0.51] [1, 1.02]>"
+# crush 2
+# gain "0.8"
+# accelerate "-4"
+
+d3 
+$ spin 4
+$ splice 16 "0 2 8*8 2 3 ~ 21"
+$ sound "numbers" # n (irand 8)
+# speed "[2, 2.02]"
+# gain 1.2
+
+d1 
+$ palindrome
+$ s "numbers:0 numbers:1 numbers:2 numbers:3" 
+
+
+do 
+    let mx = [1, 1]
+        kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1  }%8"
+    d1 
+        -- $ whenmod 24 20 (const $ silence)
+        $ sometimes (slow "2 5")
+        $ whenmod 7 4 (chop 4)
+        $ almostNever (chop 32 . spin 2)
+        $ rarely (chunk 2 (hurry 2))
+        $ stack [
+            rarely (iter 4 ) $ gain (kickPat) # s "k",
+            -- s "~ sn ~ < cp cp:1*4>",
+            loopAt "2" $ splice 32 "0..31" $ s "lbreak:3",
+            slow 8 $ s "svpc" # n (irand 16)
+        ]
+         # gain (mx!!0)     
+    d2 
+        $ chunk 2 (hurry 2)
+        $ s "sub(3,8)" 
+        # n (irand 8)
+        #legato "1.5"
+        # gain (mx!!1)
+
+
+d3 $ s "~ gel dr glitch" # n (irand 8)
+
+
+all $ (#djf (range 0.25 0.85 $ slow 8 $ sine))
+
+all $ (#accelerate "-0.2")
+
+all $ every 4 (jux (# speed "-1"))
+
+d2 silence
