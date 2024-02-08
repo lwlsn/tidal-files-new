@@ -1,0 +1,12 @@
+xfadeIn 1 8
+    $ loopAt 8
+    -- $ loopAt "{8!6 4!2}%4"
+    $ chop 2 . spin 2
+    -- $ someCyclesBy 0.05 (chunk 2 (density 4))
+    $ splice 32 "0..31"
+    $ s "mels:1"
+    # gain 1.2
+    # speed "[1, 1.02]"
+    # djf "0.5"
+    # waveloss 2 # squiz "0 1 0 2"
+    # nudge 0.2

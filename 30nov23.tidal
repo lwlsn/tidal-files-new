@@ -1,0 +1,23 @@
+setcps(160/120/2)
+
+
+hush
+
+
+gonna do some improv here
+
+do
+  let kickPat = "{1 1 ~ 1 ~ 1 1 1*2 1 }%8"
+  d2  $ striate 2 $ spin 2 $ chop 62 $ gain (kickPat) # s "k"
+
+
+d4 $ sound "odx(< 3 5 7>,8,<0 1 2>)"
+
+d1 $ (#) (fast 2 $ (#) (speed "0.5 [~ 1] 2 [ ~ 0.5]") $ vowel "a e i e ")
+$ fast "  2 4 " $ sound "bd [~ ~ bd] bd [~ bd ~]"
+
+d3 $ fast 2 $ sound "[~ hh] [~ hh] [~ hh] [~ hh]"
+
+d5 $ ply  2 $ every 4 (chunk 2 (hurry 2 ))$ "sfe-fx/4" # n (irand 16)
+
+okk we have to recompile... whoops

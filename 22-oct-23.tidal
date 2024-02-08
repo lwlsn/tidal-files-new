@@ -3,23 +3,23 @@ setcps(160/120/2)
 xfadeIn 1 8
     $ ply 2 $ spin 2
     $ loopAt 8
-    $ off (0.125/2) (bite 6 " 0 2 3 1")  
+    $ off (0.125/2) (bite 6 " 0 2 3 1")
     $ bite 4 "0 2 1 3"
     $ splice 64 "0..63"
     $ s "edits:0"
 
 
 xfadeIn 1 8
-    $ ply 2 $ spin 2 
+    $ ply 2 $ spin 2
     $ loopAt 8-- 8 to 16
-    $ off (0.125/2) (bite 6 " 0 2 3 1")  
+    $ off (0.125/2) (bite 6 " 0 2 3 1")
     $ bite 4 "0 2 1 3"
     $ splice 64 "0..63"
-    $ s "edits:1"    
+    $ s "edits:1"
 
 
 
-do 
+do
     -- resetCycles
     xfadeIn 1 16
         $ loopAt 128 -- 64 to 128
@@ -28,35 +28,35 @@ do
         # lpf (8800)
         # lpq 0.11
 
-do 
+do
     let mx = [1,1, 1]
-    d1 
+    d1
         $ s  "k [~ <~ k?>] ~  k ~ ~ "
-        # shape 0.69 
+        # shape 0.69
         # gain 0.8
         |*| gain (mx!!0)
-    d2  
+    d2
         $ whenmod 16 14 ((bite 7 "0*14"))
         $ stack [
             s "lhc(5,7,<0 2>)" # end 0.4 # speed "0.7"
         ] # room 0.15 # orbit 1
         |*| gain (mx!!1)
-    d3 
+    d3
         $ rarely (ply 2)
         $ chunk 4 ( hurry 2)
         $ speed "1(<5 <5 6 >>, 7)"
         # s "{sn peri <lcp sn>}%<6 7 12  6> " # n (run 12)
          # shape 0.99 # legato 1
         |*| gain (mx!!2 * 0.75)
-  
+
 
 
 
 --- sev
 
+hush
 
-
-do 
+do
     xfadeIn 1 16
         $ loopAt 16    $ spin 4
         $ splice 128 "0..127"
@@ -65,12 +65,12 @@ do
         # lpq 0.11
 
 
-do 
+do
     let mx = [0.9,1,1]
     d2 $ stack[
             fast 1 $ s "[cp, k] krane krane:1 krane:4"
         ] # gain (mx!!0)
-    d3 
+    d3
         $ rarely (ply 8. (#cut 2 ))
         $ whenmod 4 3 (bite 4 "3 0 3 2" )
         $ stack [
@@ -82,11 +82,11 @@ do
 
 
 
---- another one ? 
-do 
+--- another one ?
+do
     xfadeIn 1 16
-         --  $ rarely 
-        $ loopAt 8 
+         --  $ rarely
+        $ loopAt 8
         $ jux (|* speed "1.03")
         $ whenmod 14 13 ( hurry 2)
         $ splice 128 "0..127"
@@ -96,7 +96,7 @@ do
 
 
 
-do 
+do
     -- resetCycles
     xfadeIn 1 8
         -- $ spin 2
@@ -109,14 +109,14 @@ do
 
 
 
--- foans 
+-- foans
 
 setcps(157/120/2)
 
-d1 
-$ loopAt 8 
+d1
+$ loopAt 8
 $ splice 32 "0..31"
-$ s "foans" 
+$ s "foans"
 # speed "[1, 1.02]"
 
 
@@ -127,12 +127,12 @@ $ s "foans"
 
 
 xfadeIn 1 8
-    $ ply 2 $ spin 2 
+    $ ply 2 $ spin 2
     $ loopAt 8
-    $ off (0.125/2) (bite 6 " 0 2 3 1")  
+    $ off (0.125/2) (bite 6 " 0 2 3 1")
     $ bite 4 "0 2 1 3"
     $ splice 64 "0..63"
-    $ s "edits:3"  
+    $ s "edits:3"
 
 
 d1
@@ -148,18 +148,18 @@ d2 silence
 
 do
     let legatoVal = 2.2
-    d2  
+    d2
         $ spreadf [ply 2 , (# accelerate "-0.2 0.2")]
         $ stack [
             gain "{1*2 1 1 1 1 1 1}%4" # s "k"  # shape 0.59 # gain 0.85,
-            s "~ sn:2 ~ <cp cp*2>"   # shape 0.92 # gain 0.7 
+            s "~ sn:2 ~ <cp cp*2>"   # shape 0.92 # gain 0.7
         ] # legato (legatoVal-0.5)
     d3  $ note "c4" # s "sub"
-    d1 
+    d1
         $ rarely (jux ((|* speed "0.5")))
         $ struct "t(<[11!3 <17 14>] 13>, 32)"
         $ bite 4 "0 2 1 3"
-        $ ( # begin (segment 32 $  range 0.25 1.2 $ slow 8 $  saw )) 
+        $ ( # begin (segment 32 $  range 0.25 1.2 $ slow 8 $  saw ))
         $ loopAt "<4 4 8 8>"
         $ n 0
         # s "edits:6"
@@ -169,20 +169,17 @@ do
 
 
 
-d2 
+d2
 $ spreadf [ply 2 , (# accelerate "-0.2 0.2")]
 $ sometimes (jux (# speed "-2"))
 $ stack [
-    s "[bd:3*4 <sn:3 sn:3*4>]", 
+    s "[bd:3*4 <sn:3 sn:3*4>]",
     s "hh27*16?" #gain 1.1
 ]
 # speed "[1, 1.02]"
 
 
-let rslice x p = slice x (segment (toTime <$> x) $ ((>>= irand) x)) $ p 
-    rsplice x p = splice x (segment (toTime <$> x) $ ((>>= irand) x)) $ p 
+let rslice x p = slice x (segment (toTime <$> x) $ ((>>= irand) x)) $ p
+    rsplice x p = splice x (segment (toTime <$> x) $ ((>>= irand) x)) $ p
 
 hush
-
-
-
