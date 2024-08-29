@@ -1,0 +1,51 @@
+setcps(160/120/2)
+
+
+d3
+$ jux (rev .(# speed "-1"))
+$ stut 4 0.25 0.25
+$ every 4 ((fast 2 ).( struct "t(5,8)"))
+$ (0.125 <~) $ fast 2
+$ s "<sfe-sn>*<[4 2 4 4] 2 [1 2 2 4] 1>"
+# speed "1 0.5"
+# n (8+ irand 8)
+# pan (range 0.25 0.75 $ slow 8 $ rand)
+# gain 0.95
+
+
+d1
+$ every 4 (chunk 2 (hurry 2))
+ $ sound "fsubs:1*8"
+# up "-3 9"
+# legato 2
+# gain (fast 2 $  "0.8 1")
+
+
+--
+
+d2 $ loopAt 8
+$ splice 32 "0..31" $ s "hyper:1"
+ # gain 1.2
+
+d2 silence
+
+xfadeIn  4 8
+$ someCyclesBy  0.25 (spreadf [ply "<2 4 >", chop 4, rev, (#crush " 4  5 6")])
+ $ loopAt 8 $ splice 128 "0..127" $ s "hyper:3"
+# gain 1.4 # speed "[0.5, 1, 1.02]"
+
+
+
+d5
+  -- $ whenmod 24 20 (const $ silence)
+  $ whenmod 7 4 (chop 4)
+  $ almostNever ( # squiz "1 2")
+  $ someCyclesBy 0.05 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+  $ stack [
+    loopAt "{4!7 [4 8 1 2]}%1" $ splice 32 "0..31" $ s "svlng:2" # speed "[1, 1.02]"
+     ,  loopAt "{4!7 [8 16]}%1" $ splice 32 "0..31" $ s "lbreak:2" # gain 1.1
+    ]
+    |* gain 0.875 |* speed "[1, 1.02]"
+    -- # nudge 0.2
+
+all $ id

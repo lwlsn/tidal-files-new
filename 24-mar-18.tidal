@@ -1,0 +1,53 @@
+setcps(150/60/4)
+
+
+xfadeIn 1 8
+-- $ sometimes (chunk 2 (hurry "4"))
+ $  stack [
+    note "{e3 fs3 b3 gs3}%1",
+     (off 0.125 (+| note "< 12>")) $
+      note ("{~ ~  as5*2 [b5 as5] ~ ~ [fs5 b5] [b4*2 as4] ~ ~ [b4 as4] [~ b5]  ~ ~ as5 [fs4 ds5]}%4" )
+     ]
+    # s "midi1"
+
+
+xfadeIn 2 8
+$ note "{e4 fs4 b4 gs4}%1"
+# "midi3"
+
+
+d4
+$ spin 2
+$ s "<detritus fluid gel>*8?"
+# n (irand 32) # speed "[1, 1.02]"
+# nudge 0.2 # legato 1.2
+# djf (range 0.35 0.65 $ slow 8 $ sine)
+# gain 0.9
+
+
+d3 $ note "{~!3 [[as5 b6] [b5 <gs5 gs6>]] ~!3 [[gs5 ~] [ds5 <gs5 gs6>]] }%4"
+# s "midi2"
+
+
+d5
+$ fast 4 $ spin 4
+$ palindrome
+$ note "{e4 fs4 b4 gs4}%1"
+# s "numbers" # n (irand 8)
+# legato 0.78 # nudge 0.2
+
+
+d6
+  $ almostNever ( # squiz "1 2")
+  $ stack [
+      s "sfe-kd:1(3,8,<0 0 1 2>)"  # distort 0.18,
+      s "~ <sfe-cp:1 sfe-cp:1*8>" # gain 0.9
+      ]  # nudge 0.2
+      |* gain 1.1
+
+
+all $ (someCyclesBy 0.2 (spreadf [chop 32, rev, (#crush " 4  5 6")]))
+
+all $ id
+
+d6 silence

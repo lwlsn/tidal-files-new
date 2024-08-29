@@ -58,7 +58,7 @@ hush
 
 do
     xfadeIn 1 16
-        $ loopAt 16    $ spin 4
+        $ loopAt 32    $ spin 4
         $ splice 128 "0..127"
         $ s "edits:5"
         # lpf (8800)
@@ -106,6 +106,15 @@ do
         $ s "fff"
         # lpf "4000"
         # lpq "0.15"
+
+
+d2 silence
+
+all $ (# coarse "32")
+
+hush
+
+
 
 
 

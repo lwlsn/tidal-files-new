@@ -42,16 +42,7 @@ $ s "abstract"
 # speed "[1,1.02]"
 
 
-xfadeIn 2 8
-$ qtrigger
-$ someCyclesBy 0.07 (chop "<8 8 16 32>" . spin 2)
-$ someCyclesBy 0.05 (chunk 2 (density 4))
-$ loopAt "16"
-$ splice 128 "0..127"
-$ s "mels:0"
-
 
 let   kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1  }%8"
 
-d1
-$
+d2 silence

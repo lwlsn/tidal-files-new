@@ -1,0 +1,93 @@
+setcps(139/120/2)
+
+isPrime 149
+
+-- midi1 >> pluck svarkovski/key temple, pluck abstract
+-- efx >> fake dub room; echo streets; autofilter lfo on pluck svarkovski
+-- midi2 >> bass [goyard]
+-- midi3 >> pluck sword
+
+
+do
+  resetCycles
+  d1
+    $ note ( -- someCyclesBy 0.08 (off 0.125 (+"12")) $
+            "{[[e6 [~ c6]] [~ b5]]!4 [[c6 [~ b5]] [~ g5]]!4}%2")
+    # s "midi1" |+ note "-18"
+  d5 $ s "doinks/2" #gain 0.8 #nudge 0.2
+  d6 $ s "< fluid>" # n (irand 32) # speed "[1, 1.02]" # legato 2
+
+d3
+    $ spreadf [ply "<4 8 9>", chop 4, rev, (#crush " 4  5 6")]
+    $ spin 4
+    $ splice 16 "0 2 8*8 2 3 ~ 21"
+    $ sound "numbers" # n (irand 8)
+    # speed "[2, 2.02]"
+    # gain 0.92  #nudge 0.2
+
+d2 $ note "{f4 f4 [a4 ] [c5 ]}%1" # s "midi2" |- note "6"
+
+do
+  -- resetCycles
+  d1
+    $ note ( someCyclesBy 0.08 (off 0.125 (+"12")) $
+            "{[[e6 [~ c6]] [~ b5]]!4 [[c6 [~ b5]] [~ g5]]!4}%2")
+    # s "midi1" |+ note "-6"
+  d5 $ s "doinks:1/2" #gain 0.8 #nudge 0.2
+  d6 $ s "< fluid>" # n (irand 32) # speed "[1, 1.02]" # legato 2
+  d4
+    $ whenmod 24 20 (const $ silence)
+    $ whenmod 7 4 (chop 4)
+    $ almostNever ( # squiz "1 2")
+    $ someCyclesBy 0.05 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+    $ stack [
+      loopAt "{2 2 2 2 2 2 2 2 [4 8 1 2]}%1" $ splice 32 "0..31" $ s "svlng:2" # speed "[1, 1.02]"
+      ,  loopAt "{2 2 2 2 2 2 2 2 [4 8 1 2]}%1" $ splice 32 "0..31" $ s "lbreak:0" # gain 0.975
+      ]
+      |* gain 0.875 |* speed "[1, 1.02]"
+      # nudge 0.2
+      -- # djf "0.49"
+
+
+do
+    let mx = [1, 0]
+        kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1 1 ~ 1 1 [~ 1] [~ 1]  1 1  }%8"
+    d5
+        $ whenmod 24 20 (const $ silence)
+        $ stack [
+            s "lhc*8" # gain (choose [0.81,0.82 ..0.89]),
+            slow 4 $ sound "svpc:10",
+            rarely (iter 4 ) $
+            gain (kickPat) # s "k" # shape 0.99 # gain 0.8
+        ] # nudge 0.2
+         |* gain (mx!!0*1)
+
+
+d1
+$ degradeBy "0.12"
+$ note ( slow "1 2 " $ off 0.25 (+"12 24") $
+  "{[[e6 [~ c6]] [~ b5]]!4 [[c6 [~ b5]] [~ g5]]!4}%2")
+  # s "midi1" |+ note "[-18, -6]"
+
+d3
+$ note ( off 0.125 (+"<12 24 -12 0>") $
+ "{ ~ [<e6 g6 e6 g6 > <c6  c6 b5 c6>] ~ ~ }%2")
+ #  s "midi3"
+|+ note "[-6]"
+
+  do
+      let mx = [1, 0]
+          kickPat = "{1 ~ ~ 1 [~ 1] 1  ~ 1  }%8"
+      d5
+          $ silence
+      d4 $  almostNever ( # squiz "1 2")
+          $ someCyclesBy 0.05 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+          $ stack [
+          loopAt "{4}%1" $ splice 32 "0..31" $ s "lbreak:0" # gain 0.975
+          ] # nudge 0.2
+
+
+d1
+    $ degradeBy "0.42" $ note ( slow "1 2 " $ off 0.25 (+"12 24") $
+      "{[[e6 [~ c6]] [~ b5]]!4 [[c6 [~ b5]] [~ g5]]!4}%2")
+      # s "midi1" |+ note "[-18]"

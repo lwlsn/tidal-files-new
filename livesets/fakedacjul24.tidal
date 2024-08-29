@@ -1,0 +1,738 @@
+setbpm :: Pattern Double -> IO()
+setbpm a = setcps(a/60/4)
+
+---------------- _____ --------_____ - ___---  _ --------
+--- \ \ --  o -- |_o | -  o  -|_   _|-|_  | - | | -------
+---- \ \ - | | - __| | - | | -  | |  --_| | - | |_-------
+-- / o / - |_| -|___ | - |_| -  |_|  -|_o_| - |___| -----
+---------------------------------------------------------
+--  _____ - _____  ----_ ---__ ----__- _____  -- ____ ---
+--  |  _| - | o _| -- | | --\ \ - / /- | o _| -- |  _| --
+--  _\ \  - |  |_  -- | |_-- \ \_/ / - |  |_  -- _\ \  --
+-- |___\  - |_____| - |___| - \ _ / -- |_____| -|___\ ---
+----------------------------------------------------------
+
+
+
+setbpm 141
+
+
+hush
+
+all $ every 8 ( sometimes (#accelerate "-0.2")).(#crush 4)
+
+
+xfadeIn 1 8
+$ qtrigger $ stack [
+  loopAt 1
+  $ spin 2
+  $ splice 8 "<[0..7] [0 2 4 1*2 3 7 6 5*4] >" $ s "broke:0"
+
+]
+
+
+
+all $ (#djf 0.3)
+
+
+do
+  all $ id
+  d1
+    $ every 8 (#speed "-2")
+    $ stack [
+    loopAt 1 $ spin 2 $ splice 8 "<[0 2 4 1*2 3 7 6 5*4] [0..7]>" $ s "broke:0" # djf 0.38,
+    every 4 (hurry 2 ) $ sound "sfe-kd:3*4?"
+    # speed 0.6 # shape 0.8 #gain 1.1 # lpf (range 200 400 $ slow 8 $ saw)
+    ]  # gain 1.4
+
+
+do
+  all $ (#djf (0.5))
+  let mx = [1, 1]
+  d1
+    $ qtrigger
+    $ stack[ loopAt 4 $ splice 32 "0..31" "broke:2",
+    every 4 (hurry 2 ) $ sound "sfe-kd:3*2"
+    # speed 0.6 # shape 0.8 #gain 1.1 # lpf (range 200 400 $ slow 8 $ saw)
+    ]
+    |* gain (mx!!0*1.4)
+  d2
+    $ s "sfe-cp*16"
+      |* gain (mx!!1*1.5)
+       # hpf (range 2000 10000 $ slow 8 $ sine)
+
+
+do
+  all $ (#djf (0.5))
+  let mx = [1]
+  d1
+    $ qtrigger $ loopAt 8 $ splice 64 "0..63"
+    $ s "broke:3"
+    |* gain (mx!!0*1.3)
+
+all $ (#squiz "2")
+
+do
+  all $ id
+  let mx = [1, 1]
+  d1
+    $ qtrigger $ loopAt 8 $ splice 64 "0..63"
+    $ s "broke:6" -- up to 6, drums off 5
+    |* gain (mx!!0*1.1)
+  d2 $ stack [
+      every 2 (hurry 2 ) $ gain "{1 1 [1*2] [1 ~] ~ 1 1 1*2 }%8"
+      #  s "sfe-kd:2"
+    ]
+    |* gain (mx!!1*0.1)
+
+
+-- drop and longer
+do
+  let mx = [1, 1]
+  d1
+    $ qtrigger $ loopAt 16 $ splice 64 "0..63"
+    $ s "broke:7"
+    |* gain (mx!!0*1.1)
+  d2 $ stack [
+        every 8 (chunk 2 (hurry 4).(#hpf "200 200 800 800"))
+        $ gain "{1 1 [1*2] [1 ~] ~ 1 1 1*2 }%8" #  s "sfe-kd:4"
+          # speed 0.6 # shape 0.99
+      ]
+      |* gain (mx!!1*0.1)
+
+
+-- tra- nsition
+
+do
+  all $ (#djf (0.5))
+  let mx = [1, 1]
+  d1
+    $ spin 2
+    $ degradeBy 0.95
+    $ qtrigger $ loopAt 8 $ splice 64 "0..63"
+    $ s "broke:8" -- up to 6
+    |* gain (mx!!0*1.1)
+    # crush 4
+
+
+setbpm 162
+
+
+do
+  let mx = [1,0]
+  all $ id
+  d5 silence
+  d3 silence
+  d6 $ s "lcp*4" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.2
+  -- d1 $ s "chanel/2" # n (irand 4 +1)
+  resetCycles
+  -- xfadeIn 1 8
+  --   -- $ spin 2 $ chop 4
+  --     $ s "chanel/2" # n (irand 4+8)
+  --     # gain 1.25
+  xfadeIn 2 8
+    $ loopAt 96 $ splice 256 "0..255" $ s "chanel:9" # gain 1.5
+
+do
+  once $ s "sfe-fx:5" # speed "-1"
+  let mx = [1,1,0]
+  d1
+    $ qtrigger
+    $ loopAt 8
+    $ splice 32 "0..31"
+    $ s "chanel:0"
+    |* gain (mx!!2)
+  d3 $ stack [
+    s "~ sfe-cp(3,8)",
+    whenmod 7 4 (const $ s  "~ ~ [k [ k k]] [k ]") $ silence
+   ]
+   |* gain (mx!!2)
+
+all $ (# djf "0.8")
+
+-- like murakami
+do
+  all $ id
+  once $ s "sfe-fx:3" # speed "-1"
+  let mx = [1,1,0]
+  d1
+    $ qtrigger
+    $ loopAt 8
+    $ splice 32 "0..31"
+    $ s "chanel:1"
+    |* gain (mx!!2)
+  d3 $ stack [
+    gain "{1 1*2 1 [~ 1] 1 1 ~ 1}%8" # s "sfe-kd:2" # shape 0.29,
+      sometimes (iter 4 ) $ stut' 3 0.125 (*| gain "0.9" ) $ s "~ sn:4" # n "1 2 4",
+      s "~ hh27"
+     ]
+     |* gain (mx!!2)
+
+
+
+-- want u bbby
+do
+  let mx = [1,1,0]
+  d1
+    $ qtrigger
+    $ loopAt 4
+    $ splice 32 "0..31"
+    $ s "chanel:2"
+    |* gain (mx!!2)
+  d3 $ stack [
+    gain "{1 1*2 1 [~ 1] 1 1 ~ 1}%8" # s "sfe-kd:2" # shape 0.29,
+      sometimes (iter 4 ) $ stut' 3 0.125 (*| gain "0.9" ) $ s "~ sn:4" # n "1 2 4",
+      s "~ hh27"
+     ]
+     |* gain (mx!!2)
+
+
+
+
+-- cute girl
+do
+  let mx = [1,1,0]
+  let seed = "<0.35 0.5>"
+  d1
+    $ qtrigger
+    $ loopAt 8
+    $ splice 32 "0..31"
+    $ s "chanel:3"
+    |* gain (mx!!2)
+  d3 $ silence
+
+
+-- add drums
+
+d3 $ stack [
+  gain "{1 1*2 1 [~ 1] 1 1 ~ 1}%8" # s "sfe-kd:2" # shape 0.29,
+    sometimes (iter 4 ) $ stut' 3 0.125 (*| gain "0.9" ) $ s "~ sn:4" # n "1 2 4",
+    s "~ hh27"
+   ]
+   |* gain (0.12*1)
+
+-- dog and my tooth
+do
+  let mx = [1,1,0]
+  d1
+    $ qtrigger
+    $ loopAt 4
+    $ splice 32 "0..31"
+    $ s "chanel:4"
+    |* gain (mx!!2)
+  d3 silence
+
+
+-- valentino
+
+do
+  let mx = [1,1,0]
+  d1
+      $ qtrigger
+      $ loopAt 8
+      $ splice 32 "0..31"
+      $ s "chanel:5"
+        |* gain (mx!!2)
+
+
+  d3
+      $ rarely (stut' 6 (0.125) (|* gain 0.8) )
+      $ sometimesBy 0.25 (ply 4)
+      $ s "~ <sfe-fx sfe-cp(3,8)>"
+        # n (irand 8)
+        # speed "<1 2>/16"
+        # detune (range 1 4 $ slow 8 $ sine)
+         # shape (range 0.2 0.35 $ slow 8 $ tri)
+        # phasr 1 #phasdp 1  #gain 0.75 # speed "[1, 1.02]"
+
+
+-- cute girl
+do
+  let mx = [1,0]
+  d1
+    $ qtrigger
+    $ loopAt 8
+    $ splice 32 "0..31"
+    $ s "chanel:6"
+    # gain 0.25
+
+-- want u bby
+do
+  let mx = [1,0]
+  d1
+    $ qtrigger
+    $ loopAt 8
+    $ splice 32 "0..31"
+    $ s "chanel:7"
+    |* gain (mx!!1)
+
+all $ ( almostNever (#accelerate "-0.5")).(#crush 4)
+
+-- wnt  u bby chanel no 5 !
+xfadeIn 2 8
+  $ qtrigger
+  $ loopAt 8
+  $ splice 32 "0..31"
+  $ s "chanel:7"
+  # gain 1.5
+
+all $ ( sometimes (#accelerate "-0.2")).(#squiz "0 0 1 0")
+
+
+-- transition out of melody into this?
+
+xfadeIn 2 16
+  $ qtrigger
+  $ loopAt 16 -- 16 to 32
+  $ splice 32 "0..31"
+  $ s "bdown"
+  # gain 1.15 # speed "[1, 1.02]"
+
+do
+  all $ id
+  once $  s "sfe-fx:3" # speed "-1"
+  xfadeIn 4 8
+      -- $ loopAt " 8"
+      $ loopAt "2 8 4 4"
+      $ splice 64 "0..63"
+      $ s "lbreak:3"
+      # speed "[1, 1.02]"
+      |* gain 1.05
+
+
+d5
+  $ rarely (ply 4) $ chunk 4 (hurry 2)
+  $ s "revkit*8" # n (irand 8) # legato 0.8
+  # up (randcat [0,3,5,2]) # shape 0.96
+  # coarse "2 4 8 12" |* gain "0.8"
+
+
+  --- pump thaat
+
+d1 $ s "<p-that*4?>"
+   # n (irand 3)
+   # shape 0.96
+   # coarse "2 4 8 12" |* gain "1.1"
+   # fshift 300
+
+d2 silence
+
+hush
+
+d1
+$ every 4 (fast 2)
+-- $ degrade
+$ stack [
+s "gab:1(3,8)" # up "-4" # shape 0.25 ,
+ s "sfe-kd:2*8?" # shape 0.962 # speed 0.8 # gain 1.5
+]
+ # coarse "2 4 8 12"
+
+
+setbpm 164
+
+d4 silence
+
+d2 silence
+
+
+-- only d5 and half d3 drums
+
+
+xfadeIn 2 8
+  $ loopAt 4 $ splice 32 "0..31"
+  $ s "grow" # speed "[1, 1.02]"
+  # gain 1.5
+
+--degrade d3, fshift pthat, *4?
+
+do
+  let mx = [1,1]
+  d3 $ silence
+  d1 $ silence
+  d2 $ loopAt 8 $ splice 32 "0..31"
+    $ s "grow:1"
+    # speed "[1, 1.02]" # gain 1.5
+
+
+do
+ let mx = [1,1]
+ d2 $ loopAt 8 $ splice 32 "0..31"
+   $ s "grow:2"
+   # speed "[1, 1.02]" # gain 1.5
+ d6 $ stack [
+    loopAt 8 $ splice 32 "0..31" $ s "lw-drum:2" #gain 1.2,
+   sometimes (fast "2 1") $ s "sfe-kd:8*4"  # speed "[0.8, 0.82]",
+   loopAt 16 $ splice 32 "0..31" $ s "svlng:4" # gain 1.1,
+   sometimes (fast 4) $ s "~ lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.7 ]
+   |* speed "[1, 1.02]"
+
+
+all $ (# crush 4).(#djf (range 0.4 0.7 $ slow 8 $ sine))
+
+all $ id
+
+ do
+  let mx = [1,1] -- add in d4
+  d3 $ silence
+  d5 $ silence
+  -- xfadeIn 2 8 $ loopAt 8 $ splice 32 "0..31"
+  --   $ s "grow:0"
+  --   # speed "[1, 1.02]" # gain 1.5
+  --   |* gain (mx!!0)
+  d2 $ loopAt "4 " $ splice 32 "0..31"
+     $ s "grow:4" # gain 1.5 -- to 4
+
+d6 $ stack [
+       loopAt 16 $ splice 32 "0..31" $ s "svlng:4" # gain 1.1]
+       |* speed "[1, 1.02]"
+
+
+d6 $ stack [
+       -- every 8 (loopAt 2) $ loopAt "8!7 4" $ splice 32 "0..31" $ s "lbreak:5" # speed "[1, 1.02]",
+       -- whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,
+       -- fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78 ,
+       sometimes (fast "2 1") $ s "sfe-kd:8*4"  # speed "[0.8, 0.82]",
+       loopAt 16 $ splice 32 "0..31" $ s "svlng:4" # gain 1.2
+        ]
+
+  do
+      d2
+      $ sometimesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+      $ almostNever (ply "2 4 8 12")
+      $ stack [
+          slow 8 $ s "svpc" #n (choose [2,3,6]) # legato 2,
+          fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.8 ,
+          sometimes (fast 2) $ s "sfe-kd:3*2" # speed "[1, 1.02]",
+          loopAt 8 $ splice 32 "0..31" $ s "svlng:3" # gain 1.2
+          ]
+
+
+-- streamEnableLink tidal True
+
+d3
+    $ s "gel*16?"
+    # n (irand 8)
+    # legato 0.4
+    # up (randcat [0,3,5,2])
+    # shape 0.96 # gain 0.9 # coarse 4
+
+
+  all $ ( # fshift (range 10 400 $ slow 16 $ saw))
+
+all $ id
+
+
+  do
+      all $ id
+      let mx = [1, 1]
+          kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1  }%8"
+      d2
+          -- $ chop 2 $ spin 2
+          $ stack [
+              degradeBy  0.21 $  gain (kickPat) # s "sfe-kw:0*2" # shape 0.25 # sus 0.3 # rel 0.3,
+              every 8 (loopAt 2) $ loopAt "8!7 4" $ splice 32 "0..31" $ s "lbreak:4",
+              every 8 (loopAt 2) $ loopAt "4!7 2" $ splice 32 "0..31" $ s "lbreak:3",
+              slow 8 $ s "svpc" # n (irand 16),
+              loopAt 8 $ splice 32 "0..31" $ s "svlng:10" # speed "[1, 1.02]"
+          ]
+           # gain (mx!!0)
+
+
+
+all $ (#djf "0.8")
+
+
+all $ (#squiz "2").(#crush 3)
+
+all $ id
+
+hush
+
+d1 silence
+
+d3 silence
+
+do
+    all $ id
+    let mx = [1, 1]
+        kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1  }%8"
+    d2
+        -- $ chop 2 $ spin 2
+        $ stack [
+            -- degradeBy  0.21 $  gain (kickPat) # s "sfe-kw:0*2" # shape 0.25 # sus 0.3 # rel 0.3,
+            -- every 8 (loopAt 2) $ loopAt "8!7 4" $ splice 32 "0..31" $ s "lbreak:4",
+            -- every 8 (loopAt 2) $ loopAt "4!7 2" $ splice 32 "0..31" $ s "lbreak:3",
+            slow 8 $ s "svpc" # n (irand 16),
+            loopAt 8 $ splice 32 "0..31" $ s "svlng:10" # speed "[1, 1.02]"
+        ]
+         # gain (mx!!0)
+
+
+d6 $ stack [
+      -- every 2 (loopAt 2) $ loopAt "8!7 16" $ splice 32 "0..31" $ s "lbreak:5" # speed "[1, 1.02]",
+      whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,
+      fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78 ,
+      -- sometimes (fast "2 1") $ s "sfe-kd:8*4"  # speed "[0.8, 0.82]",
+      loopAt 16 $ splice 32 "0..31" $ s "svlng:4" # gain 1.2
+      ]
+
+
+setbpm 180
+
+xfadeIn 1 8
+$ loopAt 8
+$ splice 32 "0..31"
+$ s "pig" # gain 1.5
+
+
+do
+  let mx = [1, 0]
+  d2 $ qtrigger
+    $ loopAt 8
+    $ splice 16 "0..15"
+    $ s "pig:2" # gain 1.5
+
+
+do
+  let mx = [1, 1,0]
+  d2
+    $ qtrigger
+    $ loopAt 8
+    $ splice 16 "0..15"
+    $ s "pig:3" # gain 1.5
+  d3 $ slow 2
+    $ s "808bd:1(3,8)" # up "-12"
+    |* gain (mx!!2)
+
+
+do
+  let mx = [1, 1,0]
+  d2 $ qtrigger
+    $ loopAt 16
+    $ splice 16 "0..15"
+    $ s "pig:4" # gain 1.5
+  d3 $ silence
+  d4 $ s "hey/4" # n (irand 3)
+      |* gain (mx!!1)
+
+--xfade in other part
+
+xfadeIn 4 8 $ loopAt " 1 2 "
+$ degrade
+$ splice "4 2 8" "0..7" $ s "limb"
+# gain 1.1
+
+xfadeIn 1 8 $ silence
+
+d4 silence
+
+all $ id
+
+-- after a fizz?
+do
+  let mx = [1, 1,0]
+  d2 $ qtrigger
+    $ loopAt 16
+    $ splice 16 "0..15"
+    $ s "pig:5" # gain 1.5
+  d3 $ silence
+
+
+do
+  let mx = [1, 1,0]
+  d2 $ qtrigger
+    $ loopAt 16
+    $ splice 16 "0..15"
+    $ s "pig:6" # gain 1.5
+  d3 $ slow 2 $ s "808bd:1(3,8)" # up "-12"
+    # shape 0.69
+    |* gain (mx!!2)
+
+
+all $ (# djf (range 0.35 0.45 $ slow 8 $ sine))
+
+
+
+do
+  let mx = [1, 1,0]
+  all $ id
+  d2 $ qtrigger
+    $ loopAt 32
+    $ splice 16 "0..15"
+    $ s "pig:7" # gain 1.5
+  d3 $ slow 2 $ s "808bd:1(3,8)" # up "-12"
+    # shape 0.99
+    |* gain (mx!!2)
+
+
+d4 silence
+
+d6 silence
+
+-- to do: transition plzz
+xfadeIn 2 8
+$ spin 2
+$ loopAt 8
+$ splice 32 "0..31" $ s "gecs"
+# gain 1.65
+
+
+
+d1
+    $ every 8 (#hpf "200 400 800 1e3")
+    $ every 5 (#crush 5)
+    $ stack [
+      s "808:1(7,8)?"
+      # speed 0.7 #gain 0.95
+    ]  |* gain 0.9  |*| speed "[1, 1.02]"
+
+
+
+--
+
+d1
+    $ every 8 (#hpf "200 400 800 1e3")
+    $ every 5 (#crush 5)
+    $ stack [
+       -- s " ~ [sfe-kw:7(3,8)?, sfe-fx] ~ k*2" #ctf (range 250 300 $ slow 8 $ sine) #shape 0.6,
+      s "808:1*4"  #speed 0.7
+    ]
+    |* gain 0.9 |*| speed "[1, 1.02]"
+
+all $ id
+
+d1
+    $ every 8 (#hpf "200 400 800 1e3")
+    $ every 5 (#crush 5)
+    $ stack [
+      brak $ s "[sfe-kd:1](5,8)" # shape "0.6" # speed (iter 3 "0.5 1 0.75") # coarse "3" # gain "0.9",
+       s " ~ [sfe-kw:7(3,8)?, sfe-fx] ~ k*2" #ctf (range 250 300 $ slow 8 $ sine) #shape 0.6,
+      s "808:1(7,8)?"  #speed 0.7 #gain 0.95
+    ] |* gain 1.2  |*| speed "[1, 1.02]"
+
+
+xfadeIn 3 8
+    -- $ loopAt 8
+    -- $ splice 32 "0..31"
+    $ spin 2
+    $ slice 32 (iter 8 $ "{8*2 23 12 18 28 3 7 ~ 22}%4")
+    $ s "gecs:1"
+    # gain 1.5
+
+
+xfadeIn 2 8 -- gecs bass
+    $ loopAt 4
+    $ splice 32 "0..31" $ s "gecs:6"
+    # gain 1.1
+
+
+
+
+d1 $ stack [
+every 4 (jux rev)
+$  every 5 (0.25 <~)
+$ every 8 (hurry 2 )
+$ s "sfe-kd:2*4" # shape 0.998 # speed 0.8 # gain 0.95
+]
+-- #djf 0.8
+
+
+d4
+    $ chunk 4 (chop 2.(#speed "0.5").(hurry 2))
+    $ begin (off 0.125 (+0.1) $ "0.1 0.1 [~ 0.2] 0.5")
+    # sound "<gecs:3 gecs:4>" # sustain 0.2
+    # accelerate "0.2 -0.5" #gain 1.35
+
+
+xfadeIn 3 8
+    $ loopAt 8
+    $ splice 32 "0..31"
+    -- $ spin 2
+    -- $ slice 32 (iter 8 $ "{8*2 23 12 18 28 3 7 ~ 22}%4")
+    $ s "gecs:2"
+    # gain 1.5
+
+
+xfadeIn 4 8
+        $ spin 2
+        -- $ loopAt 8
+        $ splice 32 "0..31"
+        $ slice 32 (iter 8 $ "{8*2 23 12 18 28 3 7 ~ 22}%4")
+        $ s "gecs:5"
+        # gain 1.65
+
+do
+  let mx = [1, 1]
+      djfVal = 0.5
+  d1
+    -- $ whenmod 8 7 (const $ note "{~!3 e4 gs5 [~ cs6] a4 cs5}%8" # s "ser:2")
+    $ someCyclesBy 0.25 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+    $ stack [
+        gain (iter "1 4" "{~ ~  1 ~  ~ ~ 1 [~ 1] }%8") # s "sfe-sn:2" # distort 0.2,
+        s "~ sfe-cp:12 ~ sfe-cp:12",
+        gain (iter 8 "{1 ~ 1 ~!3 1 ~!3 1!3  ~ 1 ~ 1 ~ 1!3 ~ 1  ~!3 1 ~!2 1 ~ 1 }%16" )
+          # s "909v2:1" # speed 0.5 # legato 1
+        ]
+         |* gain (mx!!0)
+  d2
+    -- $ whenmod 8 7 (const $ silence)
+    $ someCyclesBy 0.75 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+    $ stack [
+    loopAt 4 $ splice 32 "0..31" $ s "lbreak160:3"  #djf (djfVal )
+    ]
+    |* gain (mx!!1*1.25)
+
+
+setbpm 40
+
+hush
+
+THANK YOU 🍉🍉🍉🍉🍉🍉🍉
+
+
+d2 silence
+
+do
+  resetCycles
+  xfadeIn 1 16
+      $ loopAt "256"
+      $ splice 512 "0..102" $ s "angel"
+      # gain 1.25
+
+
+d3 silence
+
+--- angel eyez
+
+
+
+
+d1
+      -- $ every (irand 3) (degradeBy rand)
+      $ striate((irand 8)+1)
+      -- $ loopAt ((irand 5) +1)
+      -- $ striate (irand 64)
+      $ slice 512 (iter 8 $ "{8*2 223 128 88 228 312 487 ~ 22}%4")
+      $ s "angel"
+
+
+      d1
+            -- $ every (irand 3) (degradeBy rand)
+            $ striate((irand 8)+1)
+            -- $ loopAt ((irand 5) +1)
+            -- $ striate (irand 64)
+            $ slice 96 (iter 8 $ "{8*2 23 18 88 28 31 47 ~ 22}%4")
+            $ s "angel"
+
+
+  d1
+        -- $ every (irand 3) (degradeBy rand)
+        $ striate((irand 8)+1)
+        $ loopAt (24)
+        -- $ striate (irand 64)
+        $ slice 128 (iter 8 $ "{8*2 23 18 88 28 31 47 ~ 22}%4")
+        $ s "chanel"
+
+
+hush

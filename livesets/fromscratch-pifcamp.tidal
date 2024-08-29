@@ -1,0 +1,23 @@
+setbpm :: Pattern Double -> IO()
+setbpm a = setcps(a/60/4)
+
+setbpm 200
+
+me again ...
+
+we are rtraining a model ...
+
+d1 $ loopAt  2 $ splice 16 "0 1 8 23 54 3 6*8 4 2*2 32 8 17" $ s "svlng:2"
+
+
+d2 $ struct "{1 1*}%8" $ s "sfe-kd:2"
+# accelerate "0.1 0.2 -0.4" # shape 0.99
+
+
+s
+
+all $ (# accelerate "-2")
+
+all $ id
+
+ok here's the beautiful sound of a vocal model ..

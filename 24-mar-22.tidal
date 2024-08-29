@@ -1,0 +1,90 @@
+setcps(157/120/2)
+
+
+
+
+--- with ableton file
+
+
+
+
+hush
+
+do
+  let notePatA = "{fs5 ~!2 e5 ~!2 d5 ~  ~!8 a4 ~!6 d5 ~!5 d5 ~!2 fs5 ~!2 e5 ~!2 d5 ~  ~!8 a4 ~!6 d5 ~!8}%8"
+      notePatB = "{a6 ~!3 gs6 a6 e7 ~  ~!8 cs7 ~!3 d7 cs7 a6 ~ ~!8 }%8"
+      notePatC = "{e5 ~!12 d5 cs5 cs4 ~!14 a5 gs5 fs4 ~!12 a4 e5 fs5 d4 ~!7}%8"
+      notePatD = "{~!10 e6 ~!2 d7 cs7 a6 a4 ~!6 d5 ~!2 [a5, a6] cs7 e6 d5 a4 gs4}%8"
+      bassPatA = "{fs4 ~!5 d4 ~!9 a4 ~!5 d5 ~!6 a4 ~!2 fs4 ~!5 d4 ~!8 [e6 fs6] a4!2 ~!10 d4 ~!3 }%8"
+      bassPatB = "{~!8}%8"
+      mx = [1, 1, 1, 1, 1,1]
+      djfVal = 0.5
+  d1
+    $ stack [
+        note (notePatA),
+         note ( notePatB)]
+         # s "midi1"
+         |* gain (mx!!0)
+  d7
+    $ whenmod 8 7 (const $ note "{~!3 e4 gs5 [~ cs6] a4 cs5}%8" # s "midi2")
+    $ someCyclesBy 0.25 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+    $ stack [
+        gain (iter "1 4" "{~ ~  1 ~  ~ ~ 1 [~ 1] }%8") # s "sfe-sn:2" # distort 0.2,
+        s "~ sfe-cp:12 ~ sfe-cp:12",
+        gain (iter 8 "{1 ~ 1 ~!3 1 ~!3 1!3  ~ 1 ~ 1 ~ 1!3 ~ 1  ~!3 1 ~!2 1 ~ 1 }%16" )
+          # s "909v2:1" # speed 0.5 # legato 1
+        ] # nudge 0.2
+         |* gain (mx!!1)
+  d8
+    $ whenmod 8 7 (const $ silence)
+    $ someCyclesBy 0.75 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+    $ stack [
+    loopAt 4 $ splice 32 "0..31" $ s "lbreak160:5" #nudge 0.2 #djf (djfVal )
+    ]  |* gain (mx!!2)
+  d4
+    $ whenmod 8 7 (const $ silence)
+    $ stack [
+      note (notePatC) # s "midi4"
+      ]
+    |* gain (mx!!3)
+  d5 $ note (bassPatA) # s "midi5"
+    |* gain (mx!!3)
+  d2
+    $ whenmod 8 7 (const $ silence)
+    $ loopAt 8 $ splice 64 "0..63"
+    $ s "lbreak:5" # nudge 0.2
+     |* gain (mx!!4*0.85)
+  d3
+    $ note (notePatD)
+      # s "midi3"
+       |* gain (mx!!4*1.2)
+  -- d6 $ note (bassPatB) # s "midi6"
+
+
+
+  -- playback
+
+32/4
+
+  178/2
+
+hush
+
+do
+  -- resetCycles
+  d1
+      $ someCyclesBy 0.1 (jux (spreadf [chop 8, ply 4, (#crush " 6 7 8")]))
+      $ loopAt 89
+      $ splice 1424 "0..1423" $ s "loyal2:1"
+
+
+
+  d1
+      -- $ jux rev
+       $ rarely (# octave 4)
+       $ sometimes (# octave 6)
+       $ sometimes (# velocity 0.6)
+       $ struct "t([7|9|13],16,1)"
+       $ n (scale "minor" (sometimes rev $ "[0 2 3 4 6 7 6 [8|10]]*2"))
+       |+ n "<6 1 4 4 3!4>" |+ n "-7"
+       # sound "mmsynth:1" # velocity 0.5 # legato 0.8

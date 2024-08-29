@@ -1,0 +1,133 @@
+
+
+setbpm 161
+
+
+d1 $ s "k*4"
+
+
+--
+-- patternify2 :: (a -> b -> c -> Pattern d) -> Pattern a -> Pattern b -> c -> Pattern d
+-- patternify2 f (Pattern _ _ (Just a)) (Pattern _ _ (Just b)) c = f a b c
+-- patternify2 f a b p = innerJoin $ (\x y -> f x y p) <$> a <*> b
+
+d4 silence
+
+d5 silence
+
+d6 silence
+
+all $ id
+
+{-
+order∷
+synths and stuff first
+
+short melody line
+
+smoosh down
+
+longer melody line
+BREAKS
+
+smoosh down
+
+longer melody line transposed
+MORE BREAKS
+
+less breaks
+another melody
+
+faster melody
+BREAKS ARE BACK
+
+-}
+
+setbpm 180
+
+
+do
+  resetCycles
+  xfadeIn 1 8 $ loopAt 164 $ splice 1028 "0..1027"
+    $ s "new:1" # gain 1.5
+    # speed "[1, 1.02]"
+
+
+d2
+$ rarely (# detune "<0 1>")
+$ note "{a5 ~ ~ b5 ~ ~ cs6 ~ ~ ~ <fs6 fs5> ~ ~ ~}%4"
+# s "midi7"
+
+all $ (#djf "0.4")
+
+do
+  all $ id
+  let mx = [1, 1,0]
+  d2 $ note "{<ds4 <[b3, fs6] ds5>> <as4 <fs4 ~>> <as5 <as5 ~>> <fs6 <fs6 ~>> <f6 <f6 fs5>> ~ <cs6 <cs6 ~ >> ~ ~!8 <~ <~ gs5 > > ~!7 }%8" # s "midi7"
+      |* gain (mx!!0)
+      |+ note 12
+  d3 $ note "{a4 ~!5 [~ b4] [b4 b4] fs4 [~ fs4] cs5 ~!5 e5 }%4" # s "midi8" --bass"
+      |* gain (mx!!1)
+  d4
+    $ whenmod 24 12 (breakup)
+    $ s "lbreak:0"
+    |* gain (mx!!2)
+
+all $ id
+
+
+do
+  all $ id
+  let mx = [1, 1,0]
+  d2 $ note "{<ds4 <[b3, fs6] ds5>> <as4 <fs4 ~>> <as5 <as5 ~>> <fs6 <fs6 ~>> <f6 <f6 fs5>> ~ <cs6 <cs6 ~ >> ~ ~!8 <~ <~ gs5 > > ~!7 }%8" # s "midi7"
+      |* gain (mx!!0)
+      |+ note 12
+  d3 $ note "{a4 ~!5 [~ b4] [b4 b4] fs4 [~ fs4] cs5 ~!5 e5 }%4" # s "midi8" --bass"
+      |* gain (mx!!1)
+  d4
+    $ whenmod 24 12 (breakup)
+    $ loopAt  4 $ splice 32 "0..31" $ s "lbreak:0"
+    |* gain (mx!!2)
+  d5
+    $ whenmod 24 12 (breakup)
+    $ loopAt 4 $ splice 32 "0..31" $ s "lbreak:2"
+    |* gain (mx!!2)
+
+
+do
+  d3 $ silence -- no bass
+  d5 $ silence -- no break2
+  d3 $ note "{a5 gs5 ~ e5 cs5 ds5 ~ ~ <e5 b5> ~!7}%4" # s "midi8"
+
+
+--end ... ?
+
+
+d2
+$ off 0.125 (+| note "12 -12")
+$ note "{<ds4 <[b3, fs6] ds5>> <as4 <fs4 ~>> <as5 <as5 ~>> <fs6 <fs6 ~>> <f6 <f6 fs5>> ~ <cs6 <cs6 ~ >> ~ ~!8 <~ <~ gs5 > > ~!7 }%8" # s "midi7"
+    -- |* gain (mx!!0)
+    |+ note 12
+
+
+d5 silence
+
+d2 silence
+
+
+
+all $ (# crush 4).(#coarse 12).(#accelerate "-0.4").(#fshift  "800")
+
+
+setcps(33/120/2)
+
+THANK YOU <333333333333333
+
+
+
+
+all $ (# crush 4).(# coarse 12).(#accelerate "-0.4").(#fshift "800")
+
+all $ (#crush 4).(# coarse 12). (#accelerate "-0.1").(# fshift "800" )
+
+setcps(999/120/2)

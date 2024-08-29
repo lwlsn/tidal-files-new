@@ -1,0 +1,62 @@
+
+import           Prelude                  hiding ((*>), (<*))
+
+import qualified Data.Map.Strict          as Map
+import           Data.Maybe               (fromJust, fromMaybe, isJust)
+import           Data.Ratio
+
+
+
+chopBy :: Pattern Int -> Pattern Double -> ControlPattern -> ControlPattern
+chopBy = patternify2 _chopBy
+
+
+-- v1?
+_chopBy :: Int -> Double -> ControlPattern -> ControlPattern
+_chopBy n f pat = squeezeJoin $ fmap (chopPart n f) pat
+
+
+chopPart :: Int -> Double -> ValueMap -> ControlPattern
+chopPart n f v = fastcat $ map (pure . rangemap v) slices
+  where
+    rangemap v (b, e) = Map.union (fromMaybe (makeMap (b,e)) $ merge v (b,e)) v
+    merge :: ValueMap -> (Double, Double) -> Maybe ValueMap
+    merge v (b, e) = do
+      b' <- Map.lookup "begin" v >>= getF
+      e' <- Map.lookup "end" v >>= getF
+      let d = e' - b'
+      return $ makeMap (b' + b*d, b' + e*d)
+    makeMap (b,e) = Map.fromList [("begin", VF b), ("end", VF e)]
+    slices = map (\i -> (slot * fromIntegral i, slot * fromIntegral i + f)) [0 .. n-1]
+    slot = (1 - f) / fromIntegral n
+
+
+-- v2 ?
+chopPart :: Int -> Double -> ValueMap -> ControlPattern
+chopPart n f v = fastcat $ map (pure . rangemap v) slices
+  where
+    rangemap v (b, e) = Map.union (fromMaybe (makeMap (b, e)) $ merge v (b, e)) v
+    merge :: ValueMap -> (Double, Double) -> Maybe ValueMap
+    merge v (b, e) = do
+      b' <- Map.lookup "begin" v >>= getF
+      e' <- Map.lookup "end" v >>= getF
+      let d = e' - b'
+      return $ makeMap (b' + b * d, b' + e * d)
+    makeMap (b, e) = Map.fromList [("begin", VF b), ("end", VF e)]
+    slices = map (\i -> (i * slot, i * slot + f)) [0 .. fromIntegral (n - 1)]
+    slot = f
+
+
+
+    _chopBy 2 (1/6) "a b c d"
+
+
+    d1 $ chopBy 2 (1/6) $ s "k"
+
+
+    let scaleChoice = ["mixolydian", "aeolian"]
+
+    scaleChoice!!0
+
+
+    d1 $ note (scale (scaleChoice!!0) "0 1 2 3") # s "arpy*8"

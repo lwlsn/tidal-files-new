@@ -1,0 +1,76 @@
+-- splicess
+
+setcps(140/120/2)
+
+hush
+
+
+do
+  xfadeIn 5 8
+      $ fast 4 $ spin 4
+      $ palindrome
+      $ spreadf ([chop 32, rev, (#crush " 4  5 6")])
+      $ note "{fs5 fs5 b5 ds5}%1"
+      # s "numbers" # n (irand 9)
+      # legato 0.78 # nudge 0.2
+  d1
+      $ every 3 (off 0.125 ( |+  note "12"))
+      -- $ every 6 (chunk 2 (hurry 2))
+      $ sometimes (degradeBy 0.1)
+      $ note ( "{fs8 ds7 [ds8, ds9] [as6, as7] [f7, cs8] cs7 as7 gs6 [b7, b6] as6 [fs7, as7] ds6 fs7 [gs6, gs7] [fs7, as7] [as6, fs7]}%8")
+      # s "midi1"
+      |- note 24
+
+
+d2
+$ note "<fs5 fs5 b5 ds5>(<5 5 3 3>,8,<0 2 1>)"
+# s "midi2"
+|- note "12 12 0 12"
+-- # speed "[1, 1.02]"
+ -- # nudge 0.2
+
+
+d4
+  -- $ whenmod 24 20 (const $ silence)
+  $ whenmod 7 4 (chop 4)
+  $ almostNever ( # squiz "1 2")
+  $ someCyclesBy 0.05 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+  $ stack [
+    loopAt "{4!7 [4 8 1 2]}%1" $ splice 32 "0..31" $ s "svlng:2"
+     , loopAt "{8!7 [4 8 16  2]}%1" $ splice 32 "0..31" $ s "lbreak:5" # gain 0.975
+    ]
+    |* gain 0.95 |* speed "[1, 1.02]"
+    # nudge 0.2
+    -- # djf "0.4
+
+
+d3
+  $ almostNever ( # squiz "1 2")
+  -- $ someCyclesBy 0.2 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+  $ stack [
+      s "sfe-kd:5(3,8,<0 0 1 2>)" # speed 0.8 # distort 0.25 # gain 1.1,
+      s "~ sfe-cp" # fshift (range 0 50 $ slow 8 $ sine),
+      fast 4 $ s "<sfe-h>*<[4 2 4 4] 2 [1 2 2 4] 1>" # n (irand 8) # gain 0.7,
+      s "detritus*16?" # n (irand 32) # speed "[1, 1.02]" # legato 1.4
+      ]
+      # nudge 0.2
+
+
+d5
+$ rarely (jux (rev))
+$ sometimes (palindrome )
+$ note (iter 8 "{fs7/2 as6 ds7 [~ ds6] cs7/2 ds7}%8")  # s "midi3"
+|- note 12
+
+
+all $ (#accelerate "-0.02 0.9").(#squiz "1 0 2 0")
+
+
+do
+  let mult = 0
+  all $ (#hpf (100*mult)).(#coarse mult)
+
+
+all $ id
+
+hush

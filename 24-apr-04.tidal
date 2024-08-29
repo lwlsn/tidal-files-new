@@ -1,0 +1,55 @@
+setcps(157/120/2)
+
+16+8
+
+
+all $ ( whenmod 8 7 (# accelerate "-0.02 0.2"))
+
+all $ (spreadf [ply "<4 8 9>", chop 4, rev, hurry 2]).(bite 4 "0 <4 3 12 4 7>")
+
+all $ id
+
+xfadeIn 1 8
+  $ spin "2" -- add in
+  $ jux ((|* speed "1.02")) -- add in
+  -- $ loopAt "{10!6 20 [10 5]}%1"
+  $ loopAt "{20!7 10 }%1"
+  $ splice 64 "0..63"
+  $ s "loyal2:4"
+  # speed "[1, 1.02]" # gain 1.1
+
+xfadeIn 2 8
+$ spin "2"
+-- $ striate 8
+$ slow "1 2"
+$ jux (|* speed "1.02")
+$ loopAt "{64!6 [64 32] ~}%1"
+$ splice 128 "0..127"
+$ s "splassh:0"
+# shape 0.4 # gain 0.77
+# room 0.4 # sz 0.5
+
+d3
+  $ jux (|* speed 1.02)
+  $ loopAt (randcat[2,1,3]) $ slow 4 $ chop "8 16 32 8" $ s "<gel residue>"
+  # n (choose[0,7,8,11,12,16])
+  # up "[0,7,14]" # begin (rand * 0.3)
+  # shape 0.4 # gain 0.7
+  # legato 0.4
+  # room 0.4 # sz 0.5
+
+d4
+  $ s "sfe-fx:0"
+  # n (choose [0,1,4,5])
+  # speed "[-0.75, -0.752]"
+  # shape 0.4 # gain 0.65
+  # legato 1.5
+
+
+
+  xfadeIn 1 8
+  $ loopAt 20
+  -- $ loopAt "{20!6 10 [10 5]}%1"
+  $ splice 64 "0..63"
+  $ s "loyal2:5"
+  # speed "[1, 1.02]" # gain 1.1

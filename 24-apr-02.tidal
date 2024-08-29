@@ -1,0 +1,175 @@
+
+setcps(157/60/4)
+
+
+-- lil melody
+
+
+{-
+low notes  (lp/hp in)
+bass + glitch (after swoosh)
+-}
+
+all $ id
+
+
+
+let modFunc p =  off 0.25 (
+      (|*| gain 0.75).
+      (# pan (density 2 $ range 0.25 0.75 sine)).
+      (|*| speed (iter 4 "0.7 0.5 0.4 -0.75")).
+      (iter 8).
+      (every' 4 2 $ slow 2)
+      ) $ every' 4 3 (density 2)
+      $ every' 3 2 (within (0.25, 0.75) (slow 2))
+      $ whenmod 4 2 (iter 4)
+      $ every' 8 6 brak $ p
+
+
+d1 $ s "k*4" # nudge 0.16
+
+d2 $ note "c5*4" # s "midi1"
+
+  do
+    resetCycles
+    once $ s "sfe-fx:4" # speed "[-0.75, -0.752]"
+    d6
+      -- $ whenmod' 24 12 16 (|*| gain 0)
+      $ note "{<c5 ds4 g4 c4 > ~ ~ [~ < as5 ds5 g5 c6>]}%2"
+      # sound "midi1"
+      -- # sound "midi2"
+      # shape 0.57 #speed "[1, 1.02]" # nudge 0.16
+    d2
+      -- $ jux (|* speed 1.02)
+      $ loopAt (randcat[2,1,3]) $ slow 4 $ chop "8 16 32 8" $ s "<gel residue>"
+      # n (choose[0,7,8,11,12,16])
+      # up "[0,7,14]" # begin (rand * 0.3)
+      # shape 0.4 # gain 0.6
+      # legato 0.4
+      # room 0.8 # sz 0.5
+      # nudge 0.2
+
+hush
+
+d1
+    $ every 4 (brak)
+    $ whenmod 8 7 (const $ note (iter 8 "{12*2 ~ [~ 14] 15 [10 14] ~ 24 [~ 19]}%8 ") # s "midi5" )-- #sound "midi3")
+    -- $ jux (|* speed 1.02)
+    $ slow "1 2 2 4" $ spin "1 2 2 4"
+    $ off 0.125 (# octave "<5 6 >")
+    $ gain "1(11,16)"
+    # sound "midi2"
+    -- # sound "midi1"
+    # note (iter 16 "{0 3 7 10 14 14 0 3 7 10 0 3}%16")
+    |+ note "-12 0 12 0 " # nudge 0.14
+
+
+d3
+  $ every 4 (brak)
+  -- $ jux (|* speed 0.5)
+  $ whenmod 8 7 (const $ silence)
+  $ stack[
+  -- s " sfe-kd:11(3,8) sfe-kd:11(2,8,<2 3>)",
+  s "~ sfe-sn:2 ~ [~ sfe-sn:1]" # speed 0.8 # gain 0.9,
+  -- gain "{1 ~ [~ 1] ~ 1 ~ 1 1 ~ 1 ~ 1 1 ~ [~ 1] 1 }%8" # s "sfe-kd:0"
+  gain "{1 ~ [~ 1] ~  }" # s "sfe-kd"
+    ]
+    # distort 0.23
+    # shape 0.886
+    |* gain 0.92 # note "< -8 -8 -8 1>"
+    -- # legato 2
+  -- # nudge 0.16
+          -- # orbit 1 # pan "1"
+    -- # room 0.8 # sz 0.5
+
+
+d5
+  $ rarely (ply 4) $ chunk 4 (hurry 2)
+  $ s "revkit*8" # n (irand 8) # legato 0.8
+  # up (randcat [0,3,5,2]) # shape 0.96
+  # coarse "2 4 8 12" |* gain "0.7"
+  -- # nudge 0.16
+      -- # orbit 2 # pan "2"
+
+
+d4
+    $ loopAt "4"
+    $ splice 64 "0..63"
+    $ s "lbreak:3"
+    -- # nudge 0.16
+     # speed "[1, 1.02]"
+    |* gain 0.95
+    -- # orbit 3 # pan "3"
+
+all $ id
+
+d1
+-- $ sometimes (palindrome )
+-- $ rarely (rev)
+$ stack [
+  note "{d4 a4 ~ f5 c6 ~!3 f4 c5 ~ <g4 a3> <d5 e4> ~ <g5 d5> <a5 e5> }%8" # s "midi5" -- # s "midi3"
+  , note (-- off 0.125 (+12) $
+    "{f5 [g6 a6] g6 ~ c6 g6 b6 c7 g5 d6 b6 <a5 c5> <e6 g5> <c7 d6> <d5 ~> <e6> }%8") # s "midi2" -- #s "midi1"
+  ]
+|- note "[2]" # nudge 0.19
+
+all $ ( whenmod 8 7 (chop 32.striate 2))
+
+
+-- new drumbeat here
+
+do
+  all $ id
+  d5 $ silence
+  d1
+    -- $ rarely (palindrome )
+    $ sometimes (rev)
+    $ stack [
+      note "{d4 a4 ~ f5 c6 ~!3 f4 c5 ~ <g4 a3> <d5 e4> ~ <g5 d5> <a5 e5> }%8" # s "midi5"
+      , note (-- off 0.125 (+12) $
+      "{f5 [g6 a6] g6 ~ c6 g6 b6 c7 g5 d6 b6 <a5 c5> <e6 g5> <c7 d6> <d5 ~> <e6> }%8") # s "midi2"
+      ]
+      |- note "14" # nudge 0.19
+  d4
+          $ loopAt "8" $ splice 64 "0..63"
+          $ s "lw-drum:6"
+          # speed "[1, 1.02]" |* gain 1.05
+  d3
+        $ s "<gel residue >*8?"
+        # legato 0.5
+        # speed (range 0.5 2 $ slow 8 $ sine)
+        # n (irand 32) #gain 1.1
+
+
+all $ someCyclesBy 0.02 (#accelerate  "2 -2")
+
+d6
+  -- $ whenmod' 24 12 16 (|*| gain 0)
+  $ note "{<ds4 g4 c4 c5> ~ ~ [~ <ds5 g5 c6 as5>]}%2" # sound "midi1"
+  # shape 0.57 #speed "[1, 1.02]" # nudge 0.14
+
+
+d6
+    $ every 4 (brak)
+    $ whenmod 8 7 (const $ silence)
+    $ note "<c5> (<3 3 5 3>,8,<0 2 1 2>)"
+    # s "midi1" # nudge 0.14
+    # octave "5"
+
+  d2 silence
+
+d5
+  $ rarely (ply 4) $ chunk 4 (hurry 2)
+  $ s "gel*8?" # n (irand 8) # legato 0.8
+  # up (randcat [0,3,5,2]) # shape 0.96
+  # coarse "2 4 8 12" |* gain "0.728"
+  # nudge 0.16
+
+d1
+-- $ sometimes (palindrome )
+-- $ rarely (rev)
+  $ stack [
+    note "{d4 a4 ~ f5 c6 ~!3 f4 c5 ~ <g4 a3> <d5 e4> ~ <g5 d5> <a5 e5> }%8" # s "midi2"
+    -- , note (off 0.125 (+12) $ "{f5 [g6 a6] g6 ~ c6 g6 b6 c7 g5 d6 b6 <a5 c5> <e6 g5> <c7 d6> <d5 ~> <e6> }%8") # s "midi1"
+    ]
+    |- note "14"

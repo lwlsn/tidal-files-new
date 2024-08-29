@@ -11,14 +11,14 @@ hope u like algorithms :))))
 
 
 xfadeIn 2 8
-$ loopAt 2 
+$ loopAt 1
 $ s "<dr amencutup>*16?"
 # n (irand 8)
 # gain 1.1
 # speed "[1, 1.02]"
 
 do
-    once $ s "svpc" # n (irand 16) # speed "[1, 1.02]"
+    -- once $ s "svpc" # n (irand 16) # speed "[1, 1.02]"
     d4
         $ rarely (spreadf [ply 2, (#accelerate "-0.2 0.1")])
         $ spread ($) [(slow 1), (iter 4), (slow 1), (slow 1)]
@@ -27,14 +27,14 @@ do
             loopAt 4 $ splice 32 "0..31" $ sound "lbreak:2"  #speed "1" #gain 1.05,
             n "[6(3,8,<0 4>)]?" # s "[db, 808bd:5]" |*| gain 1.3 # orbit 0 # krush 3,
             fast " 0.25 0.5 " $ sound "[k(<3 5>,8,<0 1 2 >)]"
-            # shape 0.69 # gain 0.95 # speed 0.7
+            # shape 0.89 # gain 0.9 # speed 0.7
             ]
             |* gain (1.1)
 
 xfadeIn 1 8
     $ ply 2 $ spin 2
     $ loopAt 8
-    $ off (0.125/2) (bite 6 " 0 2 3 1")  
+    $ off (0.125/2) (bite 6 " 0 2 3 1")
     $ bite 4 "0 2 1 3"
     $ splice 64 "0..63"
     $ s "edits:0"
@@ -42,10 +42,10 @@ xfadeIn 1 8
     # lpq 0.11
 
 
--- something sludgy ? 
+-- something sludgy ?
 
 
-do 
+do
     resetCycles
     xfadeIn 1 16
         $ loopAt 128 -- 96 to 128
@@ -54,7 +54,7 @@ do
         # lpf (16800)
         # lpq 0.11
         # speed "[1, 1.02]"
-        # gain 0.95 
+        # gain 0.95
 
 
 
@@ -64,15 +64,15 @@ do
 😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️
 
 
-do 
+do
     let mx = [1,1,1]
-    xfadeIn 1 8 $ loopAt 96 
+    xfadeIn 1 8 $ loopAt 96
         $ splice 512 "0..511" $ s "svlng:0"
         # gain 1.1
-    d2 $ note "<-4*8? <8 1>>" 
+    d2 $ note "<-4*8? <8 1>>"
         # s "sub:1"
         # legato 2  # speed "[1, 1.02]"
-        |* gain (mx!!1*0.9) # shape 0.69 
+        |* gain (mx!!1*0.9) # shape 0.69
     d4
         $ rarely (spreadf [ply 2, (#accelerate "-0.2 0.1")])
         $ whenmod 4 3 (chunk 2 (hurry 2))
@@ -85,18 +85,19 @@ do
         |* gain (mx!!2*0.9)
 
 
-d4 
+d4
         $ (ply "<8 16>". (#cut 2 ))
         $ whenmod 4 3 (bite 4 "3 0 3 2" )
         $ spreadf [(#accelerate "-0.2").(ply 2)]
         $ stack [
-            s "lcp ~ glitch [~ glitch]" # n (irand 8 )
+            s "sfe-cp ~ glitch [~ glitch]" # n (irand 8 )
             # sus 0.5 # rel 0.8
-        ] # gain (mx!!2*0.9)
+        ]
+        -- # gain (mx!!2*0.9)
 
 all $ id
 
-d2 
+d2
     $ sometimes (ply "<8 16>". (#legato 2 ))
     $ note "<-4*8? [8 10 5 3]*2?>" # s "sub:1"
     # legato 2  # speed "[1, 1.02]"
@@ -108,24 +109,24 @@ d3 silence
 
 👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅👅
 
-xfadeIn 4 8 
+xfadeIn 4 8
     $ off 0.125 (( +| n " <2>").(stut' 6 0.125 (|*| gain 0.8)))
     $  note "<cs5 ds5 f5 f5>(3,8,<0 1>)"  # s "[sub:0, sub:1]" # legato 1
 
 --bit sparse here
 xfadeIn 2 8
  -- $ sometimes (ply "<8 16>". (#legato 2 ))
- $ loopAt "8 8 4 4" $ splice 64 "0..63" 
+ $ loopAt "8 8 4 4" $ splice 64 "0..63"
  $ s "svlng:9"
  # speed "[1, 1.02]"
  # gain 1.1
 
 
-do 
+do
     let legatoVal = "<2>"
     xfadeIn 1 16
-        $ (# begin (choose [0,0.05..0.4])) 
-        $ spin 4 
+        $ (# begin (choose [0,0.05..0.4]))
+        $ spin 2
         $ striate 8 -- add this in
         $ loopAt "<8 8 16 16>"
         $ splice 32 "0..31"
@@ -138,12 +139,12 @@ do
 
 d3 $ s "[k,cp]*8" # shape 0.79 # speed 0.7 # gain 0.82
 
-do 
+do
     let mx = [1,1]
         spinChop = 2
-    d3  
-        -- $ degradeBy 0.75
-        $ spin 4 $ chop 116  -- up to 4/116 ? why not? 
+    d3
+        $ degradeBy 0.25
+        $ spin 4 $ chop 116  -- up to 4/116 ? why not?
         $ stack[
             fast "1" $ s "[cp, k] krane krane:1 krane:4"
             # shape 0.79 # speed 0.7
@@ -153,30 +154,30 @@ do
 
 
 all $ (# djf (range 0.2 0.8 $ slow 16 $ sine))
- 
-do  
-    let multiplier = 2
+
+do
+    let multiplier = 4
     all $ (#hpf (100*multiplier)) .(# coarse (2*multiplier))
     d5 $ silence
 
 
--- add spin /chop 
+-- add spin /chop
 
 all $ id
 
 🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎🐎
 d4 silence
 
-xfadeIn 2 8 
-$ loopAt "<32>" 
+xfadeIn 2 8
+$ loopAt "<32>"
 $ splice 64 "0..63" -- down to 45
-$ s "foans" 
+$ s "foans"
 # speed "[1, 1.02, 0.98]"
 # gain 1.5
 
 do
-    d1 
-    $ whenmod 24 22 (const $ s "k*16" # speed "[1, 1.02]" # shape 0.69 # gain 0.8)
+    d1
+    -- $ whenmod 24 22 (const $ s "k*16" # speed "[1, 1.02]" # shape 0.69 # gain 0.8)
     $ sometimesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
     $ rarely (ply "2 4 8 12")
     $ stack [
@@ -186,13 +187,13 @@ do
         loopAt 8 $ splice 32 "0..31" $ s "svlng:3"
         ]
 
-d3 
-    $ s " ~ glitch" 
+d3
+    $ s " ~ glitch"
     # speed (range 0.5 2 $ slow 8 $ sine)
     # n (irand 8)
 
 do
-    d1 
+    d1
     $ sometimesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
     $ rarely (ply "2 4 8 12")
     $ every 8 (chunk 2 (hurry 2))
@@ -205,7 +206,7 @@ do
 🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠🛠
 
 
-d4 $ s "~ ~ ~ < alphabet:9>*8?" 
+d4 $ s "~ ~ ~ < alphabet:9>*8?"
 # speed "[1, 1.02]"
 # up (range 6 8 $ fast 8 $ sine)
 
@@ -213,38 +214,38 @@ d1 silence
 
 
 
-do 
+do
     resetCycles -- add/takeaway  !
-    xfadeIn 2 8 
+    xfadeIn 2 8
         $ loopAt 88 -- up to 64
         $ splice 512 "0..511" $ s "edits:4"
         # speed "[1,1.02]" # gain 1.1 # shape 0.69
 
-do 
+do
     let kickPat = "{1 1 ~ 1 1 1 ~ 1 1}%8"
     d0 $ stack [
             sometimes (fast 2 ) $ struct (kickPat) $ s "k",
             struct (inv ($) kickPat) $ s "bassPat"
     ]
 
-d1 
+d1
 $ fast 4
-$ stack 
+$ stack
 [
-    fast 4 $ s "lcp*2" #legato 1 # sus 0.4 # rel 0.4  
+    fast 4 $ s "lcp*2" #legato 1 # sus 0.4 # rel 0.4
     # up (range 24 36$ slow 4 $ sine) # gain 0.7
     ]
 
 d3 silence
 
-all $ (chop 32).(#djf 0.7)
+all $ (chop 42).(#djf 0.7)
 
-do 
+do
     once $ s "svpc" # n (irand 8) # gain 1.1
     all $ id
 
 
-d4 
+d4
 $ s "~ ~ ~ numbers*8?" # n (irand 8)
 # speed "[1.5, 1.52, 1.48]"
 # up (range 0 8 $ fast 8 $ sine)
@@ -253,7 +254,7 @@ $ s "~ ~ ~ numbers*8?" # n (irand 8)
 
 🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝🦝
 
-xfadeIn 2 8 
+xfadeIn 2 8
 $ loopAt "8"
 $ splice 64 "0..63"
 $ s "edits:7"
@@ -273,12 +274,12 @@ d4 $ s "~ ~ ~ numbers*8?" # n (irand 8)
         $ often (#crush "2 4")
         $ stack [
             gain "{1*2 ~ ~ ~ ~ ~ 1}%4" # s "k"  # shape 0.59 # gain 0.87,
-            s "~ sn:2 ~ <lcp lcp*2>"   # shape 0.92 # gain 0.7 
+            s "~ sn:2 ~ <lcp lcp*2>"   # shape 0.92 # gain 0.7
         ] # legato (legatoVal-0.5)
         |* gain (mix!!0*1.05)
-    d3  
+    d3
         $ often (#accelerate "0.2")
-        $ note "<as4 >(3,8)" 
+        $ note "<as4 >(3,8)"
             # s "[sub:0, sub:2]" # legato 2  #speed "[1, 1.02]"
          |* gain (mix!!1*0.9)
 
@@ -289,7 +290,7 @@ all $ (# accelerate "-2")
 all $ id
 
 🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃🎃
-spooky breakdownn... 
+spooky breakdownn...
 
 d4
 $ spin 2
@@ -322,16 +323,16 @@ $ stack [
 # pan 0.68
 
 
-d1 
+d1
 $ s "~ glitch dr amencutup"
 # n (irand 32)
 
 d4 silence
 
-do 
+do
     let mx = [1, 1]
         kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1  }%8"
-    d1 
+    d1
         $ whenmod 24 20 (const $ silence)
         $ sometimes (slow 2)
         $ whenmod 7 4 (chop 4)
@@ -345,7 +346,7 @@ do
          # gain (mx!!0)
     d3
         $ chunk 2 (hurry 2)
-        $ s "sub(3,8)" 
+        $ s "sub(3,8)"
         # n (irand 8)
         #legato "1.5"
         # gain (mx!!1)
@@ -354,16 +355,16 @@ do
 d1 silence
 
 do
-    -- resetCycles
-    xfadeIn 2 8 
-        $ loopAt 128 -- down to 128
+    resetCycles
+    xfadeIn 2 8
+        $ loopAt 96 -- down to 128
         $ splice 512 "0..511" $ s "edits:8"
         # speed "[1,1.02]" # gain 1.1 # shape 0.69
 
 
 d3
     $ chunk 2 (hurry 2)
-    $ s "sub(3,8)" 
+    $ s "sub(3,8)"
     # n (irand 8)
     # legato "1.5"
     # gain (0)
@@ -381,14 +382,14 @@ all $ (#accelerate "-0.2")
 all $ id
 
 
-do 
+do
     once $ s "svpc" # n (irand 8) # gain 1.1
     all $ id
 
 
-do 
+do
     let mx = [1,0,1]
-    d1 
+    d1
         $ rarely ((ply 8).(# cut 2) )
         $ whenmod 4 3 (bite 4 "3 0 2 4")
         $ s "svpc:19 ~ ~ [~ sd]" # n (irand 8+16)
@@ -396,7 +397,7 @@ do
 
 do
     -- resetCycles
-    xfadeIn 2 8 
+    xfadeIn 2 8
         $ loopAt 16 -- down to 128
         $ splice 32 "0..31" $ s "edits:9"
         # speed "[1,1.02]" # gain 1.1 # shape 0.69

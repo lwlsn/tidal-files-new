@@ -1,0 +1,9 @@
+setcps(147/120/2)
+
+
+do
+  d1 $ note "{<ds4 <[b3, fs6] ds5>> <as4 <fs4 ~>> <as5 <as5 ~>> <fs6 <fs6 ~>> <f6 <f6 fs5>> ~ <cs6 <cs6 ~ >> ~ ~!8 <~ <~ gs5 > > ~!7 }%8"
+      # s "midi1"
+  d2 $ note "{<[ds4,ds5] [b3, b4]> _ _ _ _ _ _ _ _ _ _ [cs4,cs5] _ _ _ _  }%8" # s "midi3"
+
+ 

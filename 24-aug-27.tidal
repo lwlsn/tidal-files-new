@@ -1,0 +1,49 @@
+setcps(157/60/4)
+
+
+-- weird lil melody
+
+d2
+$ rarely press
+$ rarely (off 0.125 (|+ note "<12>"))
+$ note "{<fs3!4 d3!4> gs3 a3 <cs4 e4 cs4 <d4 b3>>}%8"
+# s "nastan"
+|+ note 12
+# speed "[1,1.02]"
+
+
+d3
+$ degradeBy 0.05
+$ every 4 (0.25 <~ )
+$ sometimes (ply 2)
+$ every 4 (chunk 2 (hurry 2))
+$ s "[GBass:5*4]"
+# note "<cs5 d5 e5 d5>"
+# legato " 0.7 0.8 0.9 1"
+# shape "0.25 0.5 0.65 0.75"
+# gain 0.9
+
+
+d1
+$ rarely press
+$ almostAlways (jux rev)
+$ stack [
+s "mfx/8" # n (irand 32),
+gain "1*8?" # s (choose  ["idmhit2", "revkit"])
+#n (irand 16) # speed "[0.75 0.5]/16"
+]
+# fshift (range 100 300 $ slow 16 $ sine)
+# gain 1.124
+# speed "[1, 1.02]"
+# krush 3
+
+
+
+--------
+
+d4
+$ spin 8
+$ fast 2
+$ degradeBy 0.55
+$ every 2 (# speed "")
+$ s "wdws:7"

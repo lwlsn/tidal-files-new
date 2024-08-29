@@ -1,0 +1,34 @@
+
+setTempo :: Num a =>  a -> a -> a
+setTempo v a  = 120 + (43*a) + (10*v)
+
+let t = setTempo 0.88 0.79
+
+t
+
+setcps(t/60/4)
+
+d1
+$ off 0.125 (+| n "12")
+ $sound "  ~ ~ crys:5 crys:7*2 ~ crys:7*2 crys:2 crys:12@2 "
+# speed "[1 2]/2"
+
+d2 $ sound "dr [~ cp:1] [~ sd:1] bd "
+# (chop (rev 2) $ (#) (vowel "o") $ speed "0.5 1 2 0.5")
+# gain 1.4
+
+d3 $ sound " k k*2 k k*2 k k*2 k k*2 "
+# (rev $ fast "0.5 1 2 0.5" $ speed "0.5  0.25 ") $ (#) (fast ((+) 2 "0.5 1 2 0.5") $ chop (fast "0.5  1 " $ rev 2)
+
+d4
+
+
+do
+    {
+      -- resetCycles;
+      d2 $ slow 1 $ seqPLoop [
+      -- right hand
+      (0,2, sound "~ nastan:2*2 ~ ~ nastan:2*2 nastan:11 nastan:9*2 ~  "),
+      (2,4, sound "  nastan:0 nastan:12 nastan:0*2 nastan:9*2 ~ nastan:11*2 ~ nastan:5  ")
+      ]
+    }

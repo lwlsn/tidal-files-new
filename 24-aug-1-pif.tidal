@@ -1,0 +1,178 @@
+setbpm :: Pattern Double -> IO()
+setbpm a = setcps(a/60/4)
+
+setbpm 151
+
+all $ id
+
+
+let modFunc p =  off 0.25 (
+      (|*| gain 0.75).
+      (# pan (density 2 $ range 0.25 0.75 sine)).
+      (|*| speed (iter 4 "0.7 0.5 0.4 -0.75")).
+      (iter 8).
+      (every' 4 2 $ slow 2)
+      ) $ every' 4 3 (density 2)
+      $ every' 3 2 (within (0.25, 0.75) (slow 2))
+      $ whenmod 4 2 (iter 4)
+      $ every' 8 6 brak $ p
+
+
+all $ selectF ((1-) <$> "^repetition") [id,
+                                        shuffle 8,
+                                        sometimes (fast 2) . shuffle 8,
+                                        slow 2 . degrade . echo 4 (1/12) 0.25 . sometimes (fast 2) . shuffle 12
+                                       ]
+
+
+
+all $ selectF ((1-) <$> "^repetition") [id,
+                                       (#squiz 1),
+                                       (#squiz 2).(#coarse 10).(#accelerate  "0.2") ,
+                                       slow 2 . degrade . echo 4 (1/12) 0.25 . (#squiz 2).(#coarse (10)).(#accelerate  "0.2")
+                                        ]
+
+-- custom functions
+
+
+active :: Int -> Pattern Bool
+active n = ((/= "0") . (!!n) . words) <$> (cS_ "stick")
+
+
+-- Define multiple patterns
+pattern1 :: Pattern String
+pattern1 = "k(3,8)"
+
+pattern2 :: Pattern String
+pattern2 = "~ sn"
+
+pattern3 :: Pattern String
+pattern3 = "hh*8?"
+
+pattern4 :: Pattern String
+pattern4 = "k sn ~ sn"
+
+number2words :: p -> Pattern [String]
+number2words p = words <$> (cS_ "number")
+
+
+
+-- Function to switch patterns based on the extracted number
+
+switchPattern :: (Eq a, Num a) => a -> Pattern String
+switchPattern p
+  | p ==0 = pattern1
+  | p == 1 = pattern2
+  | otherwise = ("~ ~ ~ ~" :: Pattern String)
+
+
+
+transformPattern :: Pattern Int -> Pattern String
+transformPattern p = pattern1
+  # speed (p ~> \n -> (fromIntegral n / 8) + 1)
+  # gain (p ~> \n -> (fromIntegral n / 8))
+
+
+nudgeAll (0.03)
+
+
+all $ ((# djf (range 0.35 0.75 $ slow 8 $ sine ))).(# crush 2)
+
+all $ id
+
+
+--- SOUNDS 4m here
+
+all $ id
+
+ d1 $ s "[k(<3 5 >,8, <0 1 2>), sfe-kd:2*2]"
+  #shape 0.69 # sus 0.05 # rel 0.1
+  # speed (range 0.5 2 $ slow 8 $ sine)
+  -- # fshift "100"
+
+d5 $ silence
+
+
+d5
+       -- $ whenmod 24 22 (const $  s "sfe-kd:4*16" # speed "[1, 1.02]" # shape 0.69 # gain 1)
+       $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+       -- $ ( # fshift (range 10 100 $ slow 16 $ sine))
+       $ sometimes (modFunc)
+       $ stack [
+           whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,
+           fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78 ,
+           -- sometimes (fast "2 1") $ s "sfe-kd:8*4"  # speed "[0.6, 0.62]",
+           loopAt 8 $ splice 32 "0..31" $ s "svlng:3" # gain 1.4
+           ]
+           |*| gain 1.1
+            --
+
+
+d4 $ loopAt " 2 8 4 4 "
+$ splice 32 "0..31" $ s "hbreaks:3"
+   #gain 1 # speed "[1,1.02]"
+   -- # fshift "100 200 400 800"
+
+
+all $ (# squiz "1 0 2 0").(# crush "3")
+
+all $ (#accelerate "-0.2"). ((# squiz "1 0 2 0")).(# coarse "14")
+
+
+all $ id
+
+d4 silence
+
+d1 $ rotR 1 $ slow 2
+$ stut' 3 0.125 (|* speed "2")
+$ gain (cP "stick") # s "sfe-cp:2"
+|* gain "0.25"
+|+ gain 0.8
+
+
+-- add a delay to each ??
+d2 $ rotR 2 $ slow 2
+ $ gain (rarely (iter 8) $  cP "stick")
+# s "hkeys:1"
+|* gain "0.75"
+# note (off 0.125 (+7) $ scale "ritusen" $ "^number")
+|+ note "-12 0"
+# speed "[1, 1.02]"
+
+d2 silence
+
+
+do
+  d3 $ fast 2 $ stack [
+      chop "8 16 32 8" $ s "<gel residue>"
+        # n (choose[0,7,8,11,12,16])
+        # up "[0,7,14]" # begin (rand * 0.3)
+        # ( gain(sew (active 0)  1 0 ) ),
+      s "~ sfe-sn:1" # (gain(sew (active 1)  1 0 ) ),
+      s "hh27*4" # (  gain(sew (active 2)  1 0 ))
+      ]
+      # legato ( cP "stick" / 2)
+
+
+d1 $ fast 0.5 $ stack [
+        every 8 (chunk 2 (density 2).(#hpf "200 200 800 800"))
+        $ degradeBy ("^number" / 8)
+        $ gain "1*8"
+        #  s "sfe-sn"
+          # speed ("^number" + 1) # shape 0.29
+    ]
+
+
+d3 $ stack [
+  gain "~ ~ 1 ~ " # s "<sfe-sn:2 sfe-sn:3>" # speed 0.8 # gain 0.8,
+  gain "{1 ~ ~ [~ 1] 1 1 ~ 1}%8" # sound "sfe-kd:2" # speed "[1, 1.02]",
+  off 0.125 (|+| n "<1 3 5 2>") $ struct "t(3,8)@2" $ n "<0 1 4>"
+    # sound "[amencutup:2 amencutup:3 amencutup:8]/8" #speed "2 2 4 4" #unit "c" #gain 1.1,
+    often (fast 2) $ sound "sfe-h(7,8,<0 1 2>)" #gain 0.68 # speed "0.8"
+ ]
+
+
+d1 silen
+
+ xfadeIn 3 8
+     $ silence

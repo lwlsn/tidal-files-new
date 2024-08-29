@@ -1,0 +1,106 @@
+setcps(167/120/2)
+
+all $ id
+
+d3 $ note "{ds6 fs5 fs6 <~ <e6 b5>>}%8" # s "midi2" # nudge (0.16)
+
+
+d4 $ stack[note "{ ~!12 <fs5 gs5 fs5 ds5> ~ <ds5 <ds5 fs5>> ~ }%8" # s "midi3",
+            note "{ds6 fs5 fs6 <~ <e6 b5>>}%8" # s "midi4"
+            ] # nudge (0.16)
+
+do
+  d1 $ note "{[gs4, ds5, b5] [[b4, fs5, ds6] [fs4,cs5,as5]] [e4, b4, gs5] [~ [fs4, cs5, as5]]}%1" # s "midi1 " # nudge (0.16)
+  d2 $ note (often (off 0.25 (|+ "<7 12 0 -5>")) $ "{gs4 [ds5 fs4] e4 [~ fs4]}%1" )# s "midi6" # nudge (0.16)
+
+
+d6 $ stack [
+loopAt 8 $ splice 32 "0..31" $ s "lw-drum:2" #gain 1.2,
+ fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.7 ,
+-- sometimes (fast "2 1") $ s "sfe-kd:8*4"  # speed "[0.6, 0.62]",
+loopAt 16 $ splice 32 "0..31" $ s "svlng:4" # gain 1.1]
+|* speed "[1, 1.02]"
+
+
+
+
+d6 $ stack [
+every 8 (loopAt 2) $ loopAt "2!7 1" $ splice 32 "0..31" $ s "lbreak:0",
+every 8 (loopAt 2) $ loopAt "4!7 2" $ splice 32 "0..31" $ s "lbreak:3",
+whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,
+fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78 ,
+sometimes (fast "2 1") $ s "sfe-kd:8*4"  # speed "[0.6, 0.62]",
+loopAt 16 $ splice 32 "0..31" $ s "svlng:4" # gain 1.2
+ ]
+
+ d5
+   -- $ spin (spinVal)
+   $ rarely (ply 4) $ chunk 4 (hurry 2)
+   $ s "[ gel]*8" # n (irand 32) # legato 0.8
+   # up (randcat [0,3,5,2]) # shape 0.96
+   # coarse 4 # gain 0.7
+
+
+   d3 $ degradeBy 0.45
+         $  note (
+           often (off 0.25 (|+ "<12 0>")) $ slow "2"
+           $ arp "updown"
+           $ "{[gs4, ds5, b5] [[b4, fs5, ds6] [fs4,cs5,as5]] [e4, b4, gs5] [~ [fs4, cs5, as5]]}%4" )
+         # s "midi2"
+
+ d4
+ $ spin 4
+ $ splice 16 "0 2 8*8 2 3 ~ 21"
+ $ sound "numbers:7"
+ # speed "[2, 2.02]"
+ # gain 1.1
+ # legato 0.6
+
+
+
+once $ s "sfe-fx" # speed "-0.75" # n (irand 8)
+
+
+
+
+-- hellooo
+
+
+
+ d4
+ $ spin 2
+ $ splice 16 "0 2 8*8 2 3 ~ 21"
+ $ sound "numbers:7"
+ # speed "[2, 2.02]"
+ # gain 1.1
+ # legato 0.6
+
+   d3 $ degradeBy 0.45
+         $  note (
+           often ( off 0.25 (|+ "<12 0>")) $
+           slow "2" $ arp "updown" $
+           "{[gs4, ds5, b5] [[b4, fs5, ds6] [fs4,cs5,as5]] [e4, b4, gs5] [~ [fs4, cs5, as5]]}%4" )
+         # s "midi2" # nudge (0.16)
+         |+ note "12 0 -12 0"
+
+
+  d2 $ note (  "{gs4 [ds5 fs4] e4 [~ fs4]}%1" )
+  # s "midi6" # nudge (0.16)
+  -- |+ note "12"
+
+
+ d5
+   -- $ spin (spinVal)
+   $ rarely (ply 4) $ chunk 4 (hurry 2)
+   $ s "[  residue]*8" # n (irand 32) # legato 0.8
+   # up (randcat [0,3,5,2]) # shape 0.96
+   # coarse 4 # gain 0.7
+
+
+  d6 $ stack [
+   loopAt 8 $ splice 32 "0..31" $ s "lw-drum:2" #gain 1.2,
+    fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.7 ,
+   sometimes (fast "2 1") $ s "sfe-kd:10*2"  # speed "[0.6, 0.62]"
+   , loopAt 16 $ splice 32 "0..31" $ s "svlng:7" # gain 1.1
+   ]
+   |* speed "[1, 1.02]"

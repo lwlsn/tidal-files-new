@@ -1,0 +1,32 @@
+setcps(155/120/2)
+
+d3 $ loopAt "<4>"
+    -- $ loopAt "{8!6 4!2}%4"
+    $ chop 2 . spin 2
+    -- $ someCyclesBy 0.05 (chunk 2 (density 4))
+    $ splice 32 "0..31"
+    $ s "mels:6"
+    # gain 1.2
+    # speed "[1, 1.02]"
+    # djf "0.5"
+
+hush
+d4 $ note "d4*8?" # s "synths:8"
+
+
+
+do
+  -- resetCycles
+  d3
+    $ spreadf [ply "<4 8 9>", chop 4, rev, (#crush " 4  5 6")]
+    $ bite 8 "0 <4 3 12 4 7>"
+    $ loopAt "32"
+    $ splice 128 "0..127"
+    $ s "mels:5"
+    # gain 1.6
+    # speed "[1, 1.02]"
+    # djf "0.5"
+
+
+
+d1 $ bite 2 "0 1 2 3" $ n "0 .. 7" # sound "arpy"

@@ -1,0 +1,158 @@
+setbpm :: Pattern Double -> IO()
+setbpm a = setcps(a/60/4)
+
+setbpm 200
+
+
+do
+  resetCycles
+  xfadeIn 1 8 $ loopAt 164 $ splice 1028 "0..1027"
+    $ s "new:1" # gain 1.5
+    # speed "[1, 1.02]"
+
+all $ (# crush 1) .(#coarse 2).(#accelerate "-0.01").(#fshift  "100")
+
+all $ id
+
+do
+  resetCycles
+  xfadeIn 1 8 $ silence
+  xfadeIn 2 8 $ loopAt 96 $ splice 256 "0..255"
+    $ s "new:0" # gain 1.5
+    -- # speed "[1, 1.02]"
+
+
+-- todo
+
+d6 $ fast 2
+$ almostNever (ply "2 4 8 12")
+$ stack [
+   loopAt 8 $ splice 32 "0..31" $ s "lw-drum:2" #gain 1.2,
+    fast 2 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.7,
+   sometimes (fast "2 1") $ s "sfe-kd:10*2"  # speed "[0.6, 0.62]"
+   , loopAt "24 12" $ splice 32 "0..31" $ s "svlng:7" # gain 1.1
+   ]
+   |* speed "[1, 1.02]"
+
+
+do
+  let mx = [1,0]
+  xfadeIn 2 8 $ silence
+  d1
+  -- $ spin 2 $ chop 4
+    $ s "chanel/4" # n (irand 4 +1)
+    # gain 1.25
+
+
+d5
+     -- $ spin (spinVal)
+     $ rarely (ply 4) $ chunk 4 (hurry 2)
+     $ s "[ residue]*8" # n (irand 32) # legato 0.8
+     # up (randcat [0,3,5,2]) # shape 0.96
+     # coarse 4 # gain 0.6
+
+
+d2 $ note (  "{gs4 [ds5 fs4] e4 [~ fs4]}%1" )
+  # s "midi4" # nudge (0.19)
+
+
+d3 $ degradeBy 0.45
+        $  note (
+          -- often ( off 0.25 (|+ "<12 0>")) $
+          -- slow "2" $ arp "updown" $
+          "{[gs4, ds5, b5] [[b4, fs5, ds6] [fs4,cs5,as5]] [e4, b4, gs5] [~ [fs4, cs5, as5]]}%4" )
+        # s "midi2" # nudge (0.19)
+        |+ note "12 0 -12 0"
+
+
+d2 silence
+
+do
+  let mx = [1,0]
+  d5 silence
+  d3 silence
+  d6 $  fast 0.5 $ s "lcp*2?" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.7
+  -- d1 $ s "chanel/2" # n (irand 4 +1)
+  resetCycles
+  xfadeIn 1 8 $ loopAt "96" $ splice 512 "0..511"
+    $ s "chanel:0" # gain 1.25
+
+all $ (#djf 0.5)
+
+-- transition out of melody into this?
+do
+  let seed = "<0.35 0.5>"
+  d2
+    $ fast "1 2"
+    $ rarely (stut' 6 (0.125) (|* gain 0.8) )
+    $ sometimesBy seed (ply 4)
+    $ s "~ <sfe-h*2 sfe-cp(3,8)>"
+      # n (irand 8)
+      # speed "<1 2>/16"
+      # detune (range 1 4 $ slow 8 $ sine)
+       # shape (range 0.2 0.35 $ slow 8 $ tri)
+      # phasr 1 #phasdp 1  #gain 0.75
+
+
+d2 silence
+
+all $ ( sometimes (#accelerate "-0.2")).(#crush 4)
+
+64*4
+
+d3
+$ every 4 (const $ silence)
+$ note "<c5 d5> [~ <c6 d6>]  <c5*2 d6> ~"
+# s "808bd:1" # speed "[1, 1.02]"
+|+ note "-12" # sus 0.2 # rel 0.2
+# gain 0.5
+
+
+--- pump thaat
+
+d1 $
+
+
+
+
+
+
+
+
+
+--- angel eyez
+
+setcps(200/60/4)
+
+do
+  resetCycles
+  xfadeIn 1 16
+      $ loopAt "312"
+      $ splice 512 "0..511" $ s "angel"
+      # gain 1.25
+
+d1
+      -- $ every (irand 3) (degradeBy rand)
+      $ striate((irand 8)+1)
+      -- $ loopAt ((irand 5) +1)
+      -- $ striate (irand 64)
+      $ slice 512 (iter 8 $ "{8*2 223 128 88 228 312 487 ~ 22}%4")
+      $ s "angel"
+
+
+      d1
+            -- $ every (irand 3) (degradeBy rand)
+            $ striate((irand 8)+1)
+            -- $ loopAt ((irand 5) +1)
+            -- $ striate (irand 64)
+            $ slice 96 (iter 8 $ "{8*2 23 18 88 28 31 47 ~ 22}%4")
+            $ s "angel"
+
+
+  d1
+        -- $ every (irand 3) (degradeBy rand)
+        $ striate((irand 8)+1)
+        $ loopAt (24)
+        -- $ striate (irand 64)
+        $ slice 128 (iter 8 $ "{8*2 23 18 88 28 31 47 ~ 22}%4")
+        $ s "chanel"
