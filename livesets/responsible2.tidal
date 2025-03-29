@@ -1,0 +1,61 @@
+setcps(147/120/2)
+
+
+
+xfadeIn 1 8
+  $ loopAt 8
+  $ splice 32 "0..31"
+  $ splice 16 "[<7*2 0*2> 3 2 4] [4 .. 7]" -- to 16
+  $ fast 2 $ randslice 8
+  $ s "stable-a:4"
+
+
+xfadeIn 7 8
+$ loopAt "8!3 16" -- 8 to 16
+$ splice 64 "0..63"
+$ s "1kpd:7"
+# gain 0
+
+do
+  -- resetCycles
+  xfadeIn 2 8
+    $ loopAt 128 $ splice 1024 "0..1023"
+    $ s "stable-a:6"
+    # speed "[1, 1.02]" #gain 1.3
+
+xfadeIn 1 8
+ $ s "stable-a"
+ # gain 0
+
+xfadeIn 3 8
+  -- $ loopAt "16 8!3" -- 8 to 16
+  $ loopAt "16"
+  -- $ splice 64 "0..63"
+  $ splice 8 "[<7*2 0*2> 3 2 4] [4 .. 7]"
+  $ fast 16 $ randslice 32
+  $ s "1kpd-foley:0"
+  # gain 1
+
+d1
+$ s "<revkit foley>*16?"
+  # legato 0.68 # n (irand 32)
+  # gain 0.8
+       # speed "[1, 1.02]"
+
+d3 $ fast 2 $ chop 16
+$ sound "{[~ bd:7] ~, ~ [bd:2*2] ~ ~ }%4"
+# vowel " a" # shape "<0.1 0.2 0.3>" -- add shape
+# gain 0.8
+
+d6 silence
+
+
+d4 $  sound "amencutup:0 amencutup:1 amencutup:2 amencutup:3 amencutup:4 amencutup:5 amencutup:6 amencutup:7 "
+# speed "0.5  1 "  # gain 0.8
+
+xfadeIn 2 8
+ $ loopAt 128
+ $ splice 1024 "0..1023"
+ $ s "stable-a:6"
+ # speed "[1, 1.02]"
+ # gain 0

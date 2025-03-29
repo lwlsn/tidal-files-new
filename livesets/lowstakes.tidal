@@ -1,0 +1,158 @@
+setcps(135/120/2)
+
+d1
+$ s "rave*8"
+# sus 0.35 # rel 0.05
+# begin (choose [0,0.02..0.8]) |* gain "0.9"
+|- note "7 -5"
+
+d2 $ sometimes (chunk 2 (hurry 2) )
+  $ s "<na dhi gumki ka>(7,<16 8>,<0 2 1>)?"
+
+
+
+all $ (every 4 (jux (# speed "-1")))
+
+all $ (#hpf 100).(#squiz "1 0 2 0")
+
+d4
+    $ every 8 (#hpf "200 400 800 1e3")
+    $ every 5 (#crush 5)
+    $ stack [
+      -- suggestion
+
+      sound "[dhi*2, bd:3(<3 5>,8)?] ",
+      s "808:1*8? "  #speed 0.7
+    ]
+    |* gain 0.9 |*| speed "[1, 1.02]"
+
+
+d3
+    $ stack [
+    s "oh hh hh hh oh hh oh hh",
+    s "{thom ~@15 ~ dhi tha dhi thom ~ ~  dhi tha dhi thom ~ ~ dhi tha dhi}%8"
+    ]
+    # speed "[2 4 1 4 ]/4"
+    # gain 0.92
+
+
+d2 silence
+
+
+d1
+    $ every 8 (#hpf "200 400 800 1e3")
+    $ every 5 (#crush 5)
+    $ stack [
+      brak $ s "[sfe-kd:1](5,8)" # shape "0.6" # speed (iter 3 "0.5 1 0.75") # coarse "3" # gain "0.9",
+       s " ~ [sfe-kw:7(3,8)?, sfe-fx] ~ k*2" #ctf (range 250 300 $ slow 8 $ sine) #shape 0.6,
+       -- add ?
+      s "808:1(7,8)?"  #speed 0.7 #gain 0.95
+    ] |* gain 0.8 |*| speed "[1, 1.02]"
+
+
+d5
+    $ loopAt "<8>"
+    $ splice 32 "0..31" $ s "[lost-drums:3]"
+    # speed (slow 1.1 "1 2") # gain 0.9
+
+
+d2
+    $ rarely (ply 4)
+    $ sometimes (chunk 4 (hurry 2))
+    $ degradeBy 0.2
+    $ s "{thom _@15 dhi thom thom dhi thom _ dhi thom thom dhi thom _ dhi thom thom dhi}%8"
+    # gain 0.9
+
+
+do
+  let mx = [1, 1]
+      djfVal = 0.5
+  d1
+    -- $ whenmod 8 7 (const $ note "{~!3 e4 gs5 [~ cs6] a4 cs5}%8" # s "ser:2")
+    $ someCyclesBy 0.25 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+    $ stack [
+        gain (iter "1 4" "{~ ~  1 ~  ~ ~ 1 [~ 1] }%8") # s "sfe-sn:2" # distort 0.2,
+        s "~ sfe-cp:12 ~ sfe-cp:12",
+        gain (iter 8 "{1 ~ 1 ~!3 1 ~!3 1!3  ~ 1 ~ 1 ~ 1!3 ~ 1  ~!3 1 ~!2 1 ~ 1 }%16" )
+          # s "909v2:1" # speed 0.5 # legato 1
+        ]
+         |* gain (mx!!0*0.81)
+
+
+all $ (# accelerate  "-2 1") . (#coarse 22).(# fshift (-50))
+
+
+all $
+
+do
+  let djfVal = 0.6
+  d2
+    $ whenmod 8 7 (const $ silence)
+    $ someCyclesBy 0.75 (spreadf [chop 8, rev, (#crush " 4  5 6")])
+    $  loopAt "8 16" $ splice 32 "0..31" $ s "[lbreak160:3, lbreaks:2]"  #djf (djfVal )
+              |* gain (0.92)    # speed "[1, 1.02]"
+
+
+
+
+
+do
+  let stutter = fast "<1 [4 1 2 1] 1 [1 [4 1]]> 1"
+  d2
+    $ stack [
+      -- loopAt 4 $ splice 32 "0..31" $ s "lbreak160:6" # speed "[1, 1.02]",
+      -- stutter $ s "[[~ ~ ~ ] [~ cp:1*4]]" # speed "1 <1 1.5 2>" # shape 0.6,
+      often stutter $ s "bshh*16" # n (irand 2)
+          # pan (range 0 1 $ slow 8 $ square)
+      ] # gain 0.84
+
+
+
+
+      do
+        let mx = [1, 1]
+        d1
+          $  (fast 2)
+          $ rarely (ply "2 4")
+          $ s "[jp(3,8,<0 2 1>)?]"
+          # n (irand 8)
+          # gain 1 # nudge 0.21
+          # speed "[1, 1.02, 0.98]"
+          # lpf (range 1000 10000 $ slow 8 $ saw)
+          |* gain (mx!!0)
+        d3
+           -- $ sometimes (modFunc)
+           $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))--
+           $ almostNever (chunk 4 (hurry 2))
+           $ sometimes (iter 4)
+           $ struct "[1 0 0 1 0 1 ~ <[0] [1]>]*1"
+             $ s "dhi c" #legato 0.25
+             # gain 1
+             # lpf (range 100 1400 $ slow 8 $ saw)
+             |* gain (mx!!1)
+
+
+             do
+                -- once $ s "moth" # speed "[-0.5, -0.52]" # gain 0.8
+                d2
+                  $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+                  -- $ ( # fshift (range 10 100 $ slow 16 $ sine))
+                  $ rarely (ply "2 4")
+                  $ sometimes (chunk 4 (hurry 2))
+                  $ stack [
+                    whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,
+                    fast 2 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78
+                          # shape 0.89  # sus 0.24 # rel 0.34 # lpf 200
+                          ]
+
+          all $ (# djf (range 0.6 0.9 $ slow 8 $ sine ))
+
+
+
+          d2 $ sometimes (chunk 2 (hurry 2) ) $ s "<sfe-kw:2 dhi>(7,8)?"
+            # speed "[0.6, 0.62]"
+            # gain 1 # shape 0.2
+
+
+
+      all $ fast 16. (# coarse 40)

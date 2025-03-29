@@ -1,0 +1,58 @@
+setcps(141/120/2)
+
+
+
+d1 $ fast 2 $ s "massi2*4?" #legato 1  # gain 0.9
+      # shape 0.89  # sus 0.44 # rel 0.44
+        -- # begin (choose [0,0.02..0.8])
+       -- # lpf 1200
+# n (irand 32)
+
+
+xfadeIn 4 8
+$ loopAt " 1 2 4 2 "
+$ degradeBy 0.4
+$ splice "4 2 8" "0..7" $ s "limb"
+# gain 0.8
+
+
+do
+  let seed = "<0.35 0.4 0.125>"
+  d2
+    $ rarely (stut' 6 (0.125) (|* gain 0.8) )
+    $ sometimesBy seed (ply 4. (|* gain 0.8))
+    $ s "~ <sfe-h*2 lcp(3,8)>"
+      # n (irand 16)
+      # speed "<1 2>/16"
+      # detune (range 1 4 $ slow 8 $ sine)
+       # shape (range 0.2 0.35 $ slow 8 $ tri)
+      # phasr 1 #phasdp 1  #gain 0.72
+
+
+d3
+    $ every 8 (#hpf "200 400 800 1e3")
+    $ every 5 (#crush 5)
+    $ stack [
+      -- brak $ s "[ifdrums](5,8)" # shape "0.6" # speed (iter 3 "0.5 1 0.75") # coarse "3" # gain "0.9",
+      s "808:1(7,8)?"  #speed 0.7 #gain 0.95
+      ]  |*| speed "[1, 1.02]"
+
+
+do
+  d5
+    $ sometimes (fast 2)
+    $ rarely (ply "2 4")
+    $ s "[jp(3,8,<0 2 1>)?]"
+    # n (irand 8)
+    # gain 0.9 # nudge 0.21
+    # speed "[1, 1.02, 0.98]"
+    # lpf (range 1000 10000 $ slow 8 $ saw)
+  d3
+     -- $ sometimes (modFunc)
+     -- $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))--
+     $ almostNever (chunk 4 (hurry 2))
+     $ sometimes (iter 4)
+     $ struct "[1 0 0 1 0 1 ~ <[0] [1]>]*1"
+       $ s "dhi c" #legato 0.25
+       # gain 1
+       # lpf (range 100 1400 $ slow 8 $ saw)

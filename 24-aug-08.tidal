@@ -1,6 +1,6 @@
 
 
-setcps(117/120/2)
+setcps(99/120/2)
 
 d1 $ note "c5*4" # s "midi1"
 
@@ -28,12 +28,12 @@ do
     # djf (range 0.33 0.66 $ slow 8 $ sine)
     # phasdp 0.3 #phaserrate (range 0.1 0.2 $ slow 8 $ sine)
     # nudge (0.14)
-     #orbit 1 #pan 1
+     -- #orbit 1 #pan 1
   d7 $  gain "1*<8 16>?"
     #  s "revkit"
     # n (irand 32) # gain 0.92
     # nudge (0.14)
-     #orbit 2 # pan 2
+     -- #orbit 2 # pan 2
 
 
 do
@@ -42,30 +42,30 @@ do
     $ rarely (ply 4)
     $ stack [
       note (
-        -- off 0.125 (+ "<7 12>")
+        off 0.125 (+ "<7 12>")
      "{ ~ ~ fs5 f5  ~ ~ ds5 f5 ~ ~  <ds5 c5> <cs5 ~> <c5 ~> <cs5 ~> <c5 ~> <gs4 ~> }%8") # s "midi3",
-      note "{fs3 fs4 ~ ~ gs3 gs4 ~ ~ as3 as4 ~!6 }%8" # s "midi3"
+      note "{fs3 fs4 ~ ~ gs3 gs4 ~ ~ as3 as4 ~!6 }%8" # s "midi3"  -- keys blanket
      ]
-     |+| note "<4 -8 16 4 >"
+     |+| note "<4 16 >"
      |* gain (mx!!0)
-  d2 $ note "{fs4 fs5 ~ ~ gs4 gs5 ~ ~ as4 as5 ~!6 }%8" # s "midi2"
+  d2 $ note "{fs4 fs5 ~ ~ gs4 gs5 ~ ~ as4 as5 ~!6 }%8" # s "midi2" -- bass excellence
    |+| note "<-8 >"
    |* gain (mx!!1)
 
 
 
   d5
-     $ whenmod 24 22 (const $ s "sfe-kd:4*16?" # speed "[1, 1.02]" # shape 0.89 # gain 0.74 #orbit 7 # pan 7 # nudge 0.14)
+     $ whenmod 24 22 (const $ s "sfe-kd:4*16?" # speed "[1, 1.02]" # shape 0.89 # gain 0.74) -- #orbit 7 # pan 7 # nudge 0.14)
      $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
      -- $ ( # fshift (range 10 100 $ slow 16 $ sine))
       $ rarely (ply 4) $ sometimes (chunk 4 (hurry 2))
      $ stack [
-         -- whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2  # orbit 3 # pan 3,
-         -- fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78  #orbit 4 # pan 4,
-         -- sometimes (fast "2 1") $ s "sfe-kd:2*4"  # speed "[0.6, 0.62]"  # orbit 5 # pan 5,
-         loopAt 8 $ splice 32 "0..31" $ s "svlng:3" # gain 1.1 # orbit 6 # pan 6
+         whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,  -- # orbit 3 # pan 3,
+         fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78, -- #orbit 4 # pan 4,
+         sometimes (fast "2 1") $ s "sfe-kd:2*4"  # speed "[0.6, 0.62]", -- # orbit 5 # pan 5,
+         loopAt 8 $ splice 32 "0..31" $ s "svlng:3" # gain 1.1 -- # orbit 6 # pan 6
          ]
-         |*| gain 0.8 # nudge (0.14)
+         |*| gain 0.8  -- # nudge (0.14)
 
 
   d1 silence

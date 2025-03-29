@@ -1,0 +1,123 @@
+setcps(110/120/2)
+
+linput = pI "linput"
+lname = pS "lname"
+
+
+once $ s "looper"
+
+d1 $ s "looper" # n "<0 1 2 3 4 5 6 7>"
+
+
+once $ s "looper" # lname "guitar"
+
+d1 $ s "guitar" # n "<0 1 2 3 4 5 6 7>"
+
+
+HELLOO EVERYONE
+
+WE ARE IMPROVISING SO BE NICE :)
+
+
+all $ (degradeBy 0.4)
+
+d3 $ s "<gel residue >(5,8, <0 2 1>)" #  n (irand 8)
+# sus (range 0.125 0.8 $ slow 8 $ sine) # rel 0.14
+# speed "[1, 1.02]"
+# gain 0.8
+
+d1
+$ whenmod 24 20 (const $ silence)
+$ every 8 (chunk 2 (hurry 2))
+-- $ every 9 (rev.spin 2.loopAt 2)
+$ stack [
+-- s "[k(<3 5>,8,<10 2 8>)]" # g 1.2 #shape 0.1 #cutoff 900,
+-- often (fast 2) $ s "hatys(7,8,<0 1>)?" # n (irand 2) # gain 0.9 #speed "<0.5 0.75>",
+-- every 2 (stut' 3 0.125 (|*| gain 0.8)) $ s "[idmhit1:8] ~ [~ idmhit1:4] ~" #speed 0.75 #gain 0.7 #coarse "8" #cutoff 1400,
+s "dr(5,8)?" # n (iter 4 "0 5 6 8 9 10 12 13 14") # coarse "2 4 6" # speed (choose [0.8, 0.7, 0.5]) # shape "0.3" # gain "0.9"
+] |*| gain "0.9"
+# speed "[1, 1.02]"
+
+
+
+d2 silence
+
+
+xfadeIn 1 8
+  $ every 4 (stut' 4 0.125 (|*| speed "<1.5 2>"))
+  $ every 6 (chunk 2 (hurry 2).(chop 2))
+  $ whenmod 4 3 (const $ silence)
+  -- $ striate 2
+  -- $ superimpose  (# vowel "<a e o>")
+  $ stack [
+    slow 2 $ struct (ascii "help error :o") $
+   s "<krane:4> ~"  #speed "<0.66 0.75>" # gain 0.95
+  ]
+
+
+d2
+  -- $ every 2 (crushit.rip 0.5 0.25)
+  $ degradeBy 0.1
+  -- $ fast 4
+  $ chop 8
+  $ stack [
+    slow "<1>" $ "bb(<3 5>,8,<0 5 2 3>)?" # n (choose [6]) #shape 0.5 #cutoff "<800 1200>"
+     , stut' 3 (0.125) (|*| speed 1.25) $ whenmod 7 4 (jux (iter 4)) $ s "~ <idmhit2:1>" #n (choose [0,2,3,4]) # gain 0.8
+     , s "{peri can:8 ~ doinks}%8" #speed 0.5 #n (irand 20) #gain 0.8
+   ]
+
+
+all $ (# cutoff (range 200 400 $ slow 16 $ sine))
+
+-- fast ??
+
+
+d7
+$ chop 32
+ $ gain "1*<8 16>?"
+   #  s "revkit"
+   # n (irand 32) # gain 0.92
+
+all $ (#accelerate "0.8 -1").(#lpf "200 400 800 1200")
+
+
+all $ (#crush 4).(#squiz 2)
+
+
+all $ id
+
+d1 silence
+
+
+d4
+  $ jux rev
+  -- $ often (fast 2)
+  -- $ spin 2
+  $ gain "0.95(5,8,<0 1 2>)"
+  # s "<pent:15 pent:16>"
+  # sus (range 0.04 0.14 $ slow 8 $ sine)
+  # rel (range 0.04 0.14 $ slow 8 $ sine)
+
+
+d1
+  -- $ foldEvery [3,4] (0.25 <~)
+  -- $ whenmod 7 4 (iter 8)
+  $ degradeBy 0.1
+  $ sometimes (density "<0.5 1>")
+  $ stack [
+  -- fast "<1 0.5>" $ every 2 (const $ s "krane:0*8?" # shape 0.4) $ s "krane:0(3,8,<0 2 5>)" #shape 0.4 |*| g 0.9,
+  -- stut' 6 (0.125/2) (|*| gain 0.8)$ iter 2 $ slow 2 $ s "~ idmhit2:4(<3 5 7>,8,<2 1 0>)"
+      -- #speed 0.5 #gain 0.8,
+  -- stut' 6 (0.125/2) (|*| gain 0.8) $ s "~ ~ ~ idmhit2:6"
+    -- #coarse "2" #speed 0.75 #cutoff 1800 # gain 1,
+  iter 4 $ s "idmhit2*2 ~ ~ <cp cp*4>" # n (irand 8)
+      # speed (range 0.5 1 $ slow 16 $ sine)
+  ]
+  #shape (range 0.2 0.4 $ fast 2 $ saw) #cutoff 3000
+  #coarse 1
+  #gain 0.775
+  #hpf 600
+
+all $ (#accelerate  "-0.2")
+
+all $ (degradeBy "<0.45 0.55 0.125 1>")

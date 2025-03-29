@@ -1,0 +1,92 @@
+setcps(131/60/4)
+
+
+d1
+-- $ (#) (fast "  2 4 " $ (#) (rev $ speed "0.5  0.25 ") $ chop (slow "0.5  1 " $ rev "1 2") $ vowel " e ")
+$ sound " [bk:2 bk:2] [ 808sd:2 ~ ~ sfe-sn:3] [~ sfe-sn:0 bk:2 ~] [sfe-sn:2] "
+
+
+d5
+$ rarely (fast "0.5")
+$ every 4 (chunk 4 (hurry 2))
+$ sound "jvgabba ~ ~ jvgabba ~ jvgabba*2 jvgabba*2 jvgabba*2 "
+# n (irand 8)
+# gain 1.2
+
+
+d2
+$ degradeBy 0.25
+$ sound "<sub:0 sub:2 sub:7 sub:4>(<3 5>,8)"
+# begin 0.2 # rel 0.8
+# speed "[1, 1.02, 0.98]"
+# lpf (range 20 400 $ slow 8 $ saw)
+
+
+d4
+$ sometimes (fast 2)
+$ stack [
+sound "~ sfe-sn:4 [~ sn:5] lcp:1",
+sound "[~ hh] [~ hh] [~ hh] [~ hh]"
+]
+# speed "[1, 1.02, 0.98]"
+# gain 0.8
+# lpf (range 1000 8000 $ slow 8 $ saw)
+
+
+
+
+
+---
+
+
+d2
+$ loopAt 4
+$ spin 2
+$ splice "[8]" "0 1 2 8*2 3 6 <2 7>*2"
+$ s "horror:5"
+# speed "[1, 1.02]"
+# gain 1.4
+
+
+d1
+$ loopAt 8
+-- $ spin 4
+$ splice "[8]" "0 2 4 8*2 4 1 <2 3>*2"
+$ s "horror:3"
+# speed "[1, 1.02]"
+# gain 1
+
+
+
+
+---
+
+do
+  d3
+    -- $ sometimes (modFunc)
+    $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))--
+    $ almostNever (chunk 4 (hurry 2))
+    $ sometimes (iter 4)
+    $ struct "[1 0 0 1 0 1 ~ <[0] [1]>]*1"
+    $ s "mfx" #legato 0.9 # n (irand 32)
+    # gain 1.1
+  d2 $ s "massi2*16?"
+    # legato 0.9 # n (irand 32)
+    # gain 1.1
+
+
+do
+  -- d3
+  --   -- $ sometimes (modFunc)
+  --   $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))--
+  --   $ almostNever (chunk 4 (hurry 2))
+  --   $ sometimes (iter 4)
+  --   $ struct "[1 0 0 1 0 1 ~ <[0] [1]>]*1"
+  --   $ s "mfx" #legato 0.9 # n (irand 32)
+  --   # gain 1.1
+  d2 $ s "massi2*4?"
+    # legato 1.4 # n (irand 32)
+    # gain 1.1
+
+
+d3 $

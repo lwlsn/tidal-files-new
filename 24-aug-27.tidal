@@ -1,15 +1,16 @@
-setcps(157/60/4)
+setcps(151/60/4)
 
 
 -- weird lil melody
 
 d2
-$ rarely press
+$ almostNever press
 $ rarely (off 0.125 (|+ note "<12>"))
 $ note "{<fs3!4 d3!4> gs3 a3 <cs4 e4 cs4 <d4 b3>>}%8"
-# s "nastan"
+# s "hjdsynth:7"
 |+ note 12
-# speed "[1,1.02]"
+# gain 1.1
+# speed "[1,1.02, 0.98]"
 
 
 d3
@@ -17,7 +18,7 @@ $ degradeBy 0.05
 $ every 4 (0.25 <~ )
 $ sometimes (ply 2)
 $ every 4 (chunk 2 (hurry 2))
-$ s "[GBass:5*4]"
+$ s "[GBass:3*4]"
 # note "<cs5 d5 e5 d5>"
 # legato " 0.7 0.8 0.9 1"
 # shape "0.25 0.5 0.65 0.75"
@@ -33,17 +34,44 @@ gain "1*8?" # s (choose  ["idmhit2", "revkit"])
 #n (irand 16) # speed "[0.75 0.5]/16"
 ]
 # fshift (range 100 300 $ slow 16 $ sine)
-# gain 1.124
+# gain 1.04
 # speed "[1, 1.02]"
 # krush 3
 
 
+d3
+  $ almostAlways press
+  $ sew (iter 4 "1 0")
+  ( n "0 .. 7" # sound "stable-a:2" # sus 0.4 # rel 0.4 # gain 1.5 )
+  (n "0 .. 7" # sound "gel*8? "  # sus 0.4 # rel 0.4)
+  # orbit 2
+
+hush
 
 --------
 
 d4
 $ spin 8
 $ fast 2
-$ degradeBy 0.55
-$ every 2 (# speed "")
+$ degradeBy 0.75
+$ sometimes (linger 1)
+$ randslice 32
+$ splice 16 "[0 [1 3] 2 3 6 [~ 3] 2*2 1]/2"
 $ s "wdws:7"
+ # speed "[1, 1.02]"
+ # gain 0.9
+
+d2
+ -- $ often (modify)
+$ loopAt "8"
+$ splice 32 "0..31" $ s "<aph:5>"
+# speed "[1, 1.02]"
+# gain 1.2
+
+
+d6
+ $ rarely (modify)
+ $ loopAt "4 4 2 2"
+ $ splice 32 "0..31" $ s "aph:9"
+ # speed "[1, 1.02]"
+ # gain 1

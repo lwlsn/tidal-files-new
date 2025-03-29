@@ -1,0 +1,79 @@
+setcps(157/120/2)
+
+isPrime 157
+
+hush
+
+d1 silence
+
+d3 silence
+
+d4 silence
+
+d6 silence
+
+
+-- todo
+
+
+
+----- get rid ..?
+xfadeIn 2 8
+$ loopAt "8" -- 8 to 16
+$ sometimes (#accelerate "2 -0.5") $ sometimes (chunk 4 (hurry 2))
+$ spread ($)  [id, striate 8, jux (rev)]
+  $ splice 8 "0 1 1 2 4 [1|7]  [~|5|5|5] 6 "
+$ s "revoir"
+# gain 1.5
+# speed "[1, 1.02]"
+
+
+d1
+$ loopAt "4"
+$ spread ($)  [id, striate 8, jux (# speed "-1")]
+  $ splice 8 "0 1 1 2 4 [1|7]  [~|5|5|5] 6 "  $ s "lbreak160:4"
+
+  d4 $ loopAt 8 -- 8 to 16
+  -- $ almostNever (#accelerate "2 -0.5")
+  -- $ rarely (chunk 4 (hurry 2))
+  -- $ spread ($)  [id, striate 8, jux (rev)]
+    $ splice 8 "0 1 3 2 4 [1|7]  [~|5|5|5] 6 "
+  $ s "1kpd:1"
+  # gain 1.1
+  # speed "[1, 1.02]"
+
+
+  do
+    let mx = [ 1,1,1]
+    d1
+      $ whenmod 16 14 (# hpf "200")
+      $ every 4 (chunk 2 (hurry 2))
+      $ s "k [~ k]? ~ k? "
+      # shape 0.5
+      # gain (mx!!0)
+    d2
+      $  chop 64
+      $ spread ($)  [id, striate 2, jux (# speed "-1")]
+      $  s "lbreak160:11/4"
+      # gain (mx!!1*0.95)
+    d3
+      $ chunk 4 (fast 2)
+      $ sound "<massi2>(5,16,<0 1>)?"
+      #n (irand 15)
+      -- # begin (rand*0.3)
+      # speed (rand*0.5+1)
+       #legato (choose [1,1.5,2,0.5])
+      # gain (mx!!2*1.2)
+
+  d4 $ loopAt 16 -- 8 to 16
+        $  chop 32
+      $ almostNever (#accelerate "0.2 -0.5")
+      $ rarely (chunk 4 (hurry 2))
+      -- $ spread ($)  [id, striate 2, jux (rev)]
+        $ splice 8 "0 1 3 2 4 [1|7]  [3|5|5|5] 6 "
+      $ s "1kpd:8"
+      # gain 0.98
+      # speed "[1, 1.02]"
+
+
+-- see : https://www.youtube.com/watch?v=niEDK5sBdnY&list=PLNvMI21aCwMoB5qmInH1HqVCqyYa0XZSH&index=37

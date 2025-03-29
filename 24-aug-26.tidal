@@ -1,4 +1,4 @@
-setcps(136/60/4)
+setcps(100/60/4)
 
 
 136*0.5
@@ -13,14 +13,13 @@ let modify p = rarely (jux (rev.(#hpf "200"))) $
 all $ id
 
 d3
-  $ spin 4
-  $ loopAt 8
-  $ almostNever (modify)
+  -- $ jux (rev)
+  $ loopAt "4"
   -- $ splice 32 "0..31"
-  $ splice "<16>" "[0 [1 13] 2 13 6 [11 3] 2*2 10*4]/2"
+  $ splice "<16>" "[[0 2] [1 13] [1 2] [13 6] [11 3] 2*2 < 10*2 10*4>]/2"
   $ s "jane:4"
-  # speed "[[1, 1.02], [-2, -2.02]]"
-  # gain 0.9
+  # speed "[1,1.02]"
+  # gain 0.8
 
 
 do
@@ -28,8 +27,9 @@ do
       $ gain "1.3*8?"
       # s "<pent:15 pent:16>"
       # sus 0.24 # rel 0.24
-      # begin (choose [0,0.02..0.8]) |* gain "0.9"
+      # begin (choose [0,0.02..0.8]) |* gain "1.1"
     d5
+      $ almostNever (modify)
       $ rarely (ply 4) $ chunk 4 (hurry 2)
       $ s "gel*8?" # n (irand 8) # sus 0.4 # rel 0.2
       # up (randcat [0,3,5,2]) # shape 0.96
@@ -38,27 +38,32 @@ do
 
 
 d1
+  $ often press
 $ rarely (off 0.125 (|+ note "<12>"))
 $ note "{<cs6 cs6 ds6 cs6> <c6 c6 cs6 c6> <cs6 cs6 ds6 cs6> gs5  <f5 f5 ~ f5 > <c6 > <cs6  <[cs5, [cs6 ~]] [gs5]>> <gs6 <[gs6 f6]  [ds6 f6]>>}%8"
--- # s "midi1"
--- # s "crys" # speed "[1, 1.02]"
--- |+ note "-24 -12"
+# s "midi4"
+-- # s "hjdsynth:3"
+# speed "[1, 1.02]"
+|- note "24"
+# gain 1.1
  -- # nudge (0.06)
 
+ d1 silence
 
 
- d2 
+
+ d2
   $ often (modify)
- $ loopAt "4 4 8 4"
+ $ loopAt "4"
  $ splice 32 "0..31" $ s "<aph aph:1>"
  # speed "[1, 1.02]"
- # gain 1.1
+ # gain 1
 
 
 
 d6
   $ rarely (modify)
   $ loopAt "2"
-  $ splice 32 "0..31" $ s "aph:9"
+  $ splice 32 "0..31" $ s "aph:8"
   # speed "[1, 1.02]"
-  # gain 0.9
+  # gain 1

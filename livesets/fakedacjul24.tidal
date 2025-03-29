@@ -27,12 +27,11 @@ $ qtrigger $ stack [
   loopAt 1
   $ spin 2
   $ splice 8 "<[0..7] [0 2 4 1*2 3 7 6 5*4] >" $ s "broke:0"
-
 ]
 
 
 
-all $ (#djf 0.3)
+all $ (#djf 0.2)
 
 
 do
@@ -47,11 +46,12 @@ do
 
 
 do
-  all $ (#djf (0.5))
+  all $ id
   let mx = [1, 1]
   d1
     $ qtrigger
-    $ stack[ loopAt 4 $ splice 32 "0..31" "broke:2",
+    $ stack[
+      loopAt 4 $ splice 32 "0..31" "broke:2",
     every 4 (hurry 2 ) $ sound "sfe-kd:3*2"
     # speed 0.6 # shape 0.8 #gain 1.1 # lpf (range 200 400 $ slow 8 $ saw)
     ]
@@ -70,20 +70,19 @@ do
     $ s "broke:3"
     |* gain (mx!!0*1.3)
 
-all $ (#squiz "2")
 
 do
   all $ id
-  let mx = [1, 1]
+  let mx = [1, 0]
   d1
     $ qtrigger $ loopAt 8 $ splice 64 "0..63"
     $ s "broke:6" -- up to 6, drums off 5
-    |* gain (mx!!0*1.1)
+    |* gain (mx!!0*1.3)
   d2 $ stack [
       every 2 (hurry 2 ) $ gain "{1 1 [1*2] [1 ~] ~ 1 1 1*2 }%8"
       #  s "sfe-kd:2"
     ]
-    |* gain (mx!!1*0.1)
+    |* gain (mx!!1)
 
 
 -- drop and longer
@@ -92,7 +91,7 @@ do
   d1
     $ qtrigger $ loopAt 16 $ splice 64 "0..63"
     $ s "broke:7"
-    |* gain (mx!!0*1.1)
+    |* gain (mx!!0*1.3)
   d2 $ stack [
         every 8 (chunk 2 (hurry 4).(#hpf "200 200 800 800"))
         $ gain "{1 1 [1*2] [1 ~] ~ 1 1 1*2 }%8" #  s "sfe-kd:4"
@@ -108,10 +107,10 @@ do
   let mx = [1, 1]
   d1
     $ spin 2
-    $ degradeBy 0.95
+    -- $ degradeBy 0.75
     $ qtrigger $ loopAt 8 $ splice 64 "0..63"
     $ s "broke:8" -- up to 6
-    |* gain (mx!!0*1.1)
+    |* gain (mx!!0*1.3)
     # crush 4
 
 
@@ -238,7 +237,7 @@ do
   d3
       $ rarely (stut' 6 (0.125) (|* gain 0.8) )
       $ sometimesBy 0.25 (ply 4)
-      $ s "~ <sfe-fx sfe-cp(3,8)>"
+      $ s "~ <sfe-fx(3,8)>"
         # n (irand 8)
         # speed "<1 2>/16"
         # detune (range 1 4 $ slow 8 $ sine)
@@ -278,6 +277,7 @@ xfadeIn 2 8
 
 all $ ( sometimes (#accelerate "-0.2")).(#squiz "0 0 1 0")
 
+all $ id
 
 -- transition out of melody into this?
 
@@ -304,18 +304,17 @@ d5
   $ rarely (ply 4) $ chunk 4 (hurry 2)
   $ s "revkit*8" # n (irand 8) # legato 0.8
   # up (randcat [0,3,5,2]) # shape 0.96
-  # coarse "2 4 8 12" |* gain "0.8"
+  # coarse "2 4 8 12" |* gain "0.99"
 
 
-  --- pump thaat
+--- pump thaat
 
 d1 $ s "<p-that*4?>"
    # n (irand 3)
    # shape 0.96
    # coarse "2 4 8 12" |* gain "1.1"
-   # fshift 300
+   -- # fshift 300
 
-d2 silence
 
 hush
 

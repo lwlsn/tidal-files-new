@@ -1,0 +1,212 @@
+setcps(143/120/2)
+
+isPrime 149
+
+-- 4hd
+d3 silence
+
+d4 silence
+
+d1 silence
+
+d7
+$ loopAt "32" -- 16 to 32
+-- $ splice 64 "0..63"
+$ splice 8 "[<7*2 0*2> 3 2 4] [4 .. 7]"
+$ fast 8 $ randslice 8
+$ s "1kpd:3"
+# speed "[1, 1.02]"
+
+
+d3 $ chop 8 $ s "sfe-cp:1*2?"
+# pan (rand)
+
+d2 $(#) (speed $ fast (slow (fast "0.5  1 " "  2 4 ") "0.5 1 2 0.5") "0.5  0.25 ") $ (#) (sound "<sub:0 sub:2 sub:7 sub:4>(3,8)") $ chop (rev $ (+) "1 2" $ (+) "1 2" 2) $ fast "0.5 1 2 0.5" $ fast "  2 4 " $ rev $ slow (fast "  2 4 " "0.5 1 2 0.5") $ vowel "o"
+
+d4
+$ chunk 2 (hurry 2)
+$ s "<~ [~ lcp:3*2]> <sfe-sn:1 sfe-sn:2>"
+# speed "[4 1 2 0.5]/4"
+# fshift (range 10 400 $ slow 16 $ saw)
+
+
+
+do
+  let mx = [1, 1]
+      kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1  }%8"
+  d2
+      $ every 8 (loopAt "<2 4>")
+      $ stack [
+          -- gain (kickPat) # s "sfe-kd:2*2" # shape 0.65 ,
+          -- loopAt "2!7 1" $ splice 32 "0..31" $ s "lbreak:0",
+          -- every 8 (loopAt 2) $ loopAt "4!7 2" $ splice 32 "0..31" $ s "lbreak:3", -- breaks without kicks and then with
+          slow 4 $ s  "svpc" # n (irand 16),
+          loopAt 8 $ splice 32 "0..31" $ s "svlng:10" # speed "[1, 1.02]"
+          ]
+          # gain (mx!!0)
+
+
+xfadeIn 7 8
+      $ loopAt "32" -- 16 to 32
+      -- $ splice 64 "0..63"
+      -- $ splice 8 "[<7*2 0*2> 3 2 4] [4 .. 7]"
+      $ fast 8 $ randslice 8
+      $ s "1kpd:3"
+      # speed "[1, 1.02]"
+
+
+
+-- option 1
+xfadeIn 7 8
+-- $ loopAt "8!3 16" -- 8 to 16
+$ loopAt "16"
+-- $ splice 64 "0..63"
+-- $ whenmod 8 7 (# speed "[-1, 1.02]")
+$ splice 8 "[<7*2 0*2> 3*2 2 4] [4 .. 7]"
+-- $ striate 4
+$ fast 8 $ randslice 8
+$ s "1kpd:2"
+# gain 1.05 #legato 2
+# speed "[1, 1.02]"
+
+
+do
+  let mx = [1, 1]
+      kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1  }%8"
+  d2
+      $ every 8 (loopAt 2)
+      $ stack [
+          -- gain (kickPat) # s "sfe-kd:2*2" # shape 0.65 ,
+          -- loopAt "2!7 1" $ splice 32 "0..31" $ s "lbreak:0",
+          -- every 8 (loopAt 2) $ loopAt "4!7 2" $ splice 32 "0..31" $ s "lbreak:3",
+          -- slow 4 $ s  "svpc" # n (irand 16),
+          loopAt 16 $ splice 32 "0..31" $ s "svlng:10" # speed "[1, 1.02]"
+          ]
+          # gain (mx!!0)
+
+--- option 2
+d1
+-- $ loopAt "16 8!3" -- 8 to 16
+$ loopAt "16"
+-- $ splice 64 "0..63"
+$ splice 8 "[<7*2 0*2> 3 2 4] [4 .. 7]"
+$ fast 16 $ randslice 32
+$ s "1kpd-foley:0"
+# gain 1.1
+-- # speed "[1, 1.02]"
+
+  d2 $ silence
+
+
+do
+  let mx = [0, 1, 1]
+  d4
+    $ superimpose (# s "k")
+    $ rarely (off (choose [1/8, 1/16]) (|* gain 0.95))
+    $ gain "{1 ~ ~ 1? ~ ~ 1? ~ }%8"
+    # sound "bk" # shape 0.5
+    |* gain (mx!!0)
+  d5
+    $ whenmod 8 7 (slow 2)
+    $ sometimes (iter 16) $ chunk 4 (fast 2)
+    $  sound "{feel <micron feel> peri}%8"
+    # n (rev $ run "<24 8>")
+    |* gain (mx!!1)
+  d6
+    $ chunk 4 ((fast 2).(0.125 ~>))
+    $ almostNever ((ply 8). (|* gain 0.8))
+    $ s "~ sfe-sn:7 ~ sfe-sn:4" # speed "0.76"
+    # gain "0.88 0.86"
+    |* gain (mx!!2*1.1)
+
+
+d3 silence
+
+d3
+   -- $ loopAt "4!6 8 2"
+   $ loopAt 4
+   -- $ splice 32 "0..31"
+   $ fast 32 $ randslice 32 $ degradeBy 0.15
+    $ s "lbreak160:9"
+    -- # n (irand 8)
+    # speed "[1, 1.02]"
+    # gain 1.02
+
+
+---
+
+
+do
+  let mx = [0,0,1]
+  d4
+    $ superimpose (# s "k")
+    $ rarely (off (choose [1/8, 1/16]) (|* gain 0.95))
+    $ gain "{1 ~ ~ 1? ~ ~ 1? ~ }%8"
+    # sound "bk" # shape 0.5
+    |* gain (mx!!0)
+  d5
+    $ whenmod 8 7 (slow 2)
+    $ sometimes (iter 16) $ chunk 4 (fast 2)
+    $  sound "{feel <micron feel> peri}%8"
+    # n (rev $ run "<24 8>")
+    |* gain (mx!!1)
+  d6
+    $ chunk 4 ((fast 2).(0.125 ~>))
+    $ almostNever ((ply 8). (|* gain 0.8))
+    $ s "~ sfe-sn:2 ~ sfe-sn:6" # speed "0.76"
+    # gain "1 0.86"
+    |* gain (mx!!2)
+
+
+d3
+   -- $ loopAt "4!6 8 2"
+   $ loopAt 8
+   -- $ splice 32 "0..31"
+   $ fast 32 $ randslice 32 $ degradeBy 0.15
+    $ s "lbreak160:9"
+    # speed "[1, 1.02]"
+    # gain 1.02
+
+
+d7
+    $ loopAt "32" -- 8 to 16
+    $ splice 64 "0..63"
+    -- $ splice 8 "[<7*2 0*2> 3 2 4] [4 .. 7]"
+    $ fast 8 $ randslice 8
+    $ s "1kpd:2"
+    # speed "[1, 1.02]"
+
+
+d6 silence
+
+
+d1 $ sound "[db, 808bd:5]*2"
+
+d5
+   -- $ whenmod 24 22 (const $ s "sfe-kd:4*16?" # speed "[1, 1.02]" # shape 0.89 # gain 0.74) -- #orbit 7 # pan 7 # nudge 0.14)
+   $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+   -- $ ( # fshift (range 10 100 $ slow 16 $ sine))
+   $ rarely (ply 4) $ sometimes (chunk 4 (hurry 2))
+   $ stack [
+       -- whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,  -- # orbit 3 # pan 3,
+       -- fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78, -- #orbit 4 # pan 4,
+       -- sometimes (fast "2 1") $ s "bk*4"  # speed "[0.6, 0.62]" # shape 0.22 , -- # orbit 5 # pan 5,
+       loopAt 4 $ splice 32 "0..31" $ s "ldrum:3" # gain 1 -- # orbit 6 # pan 6
+       ]
+       |*| gain 1
+       -- # fshift 400
+
+
+
+
+  d7
+       $ loopAt "32" -- 8 to 16
+       -- $ splice 64 "0..63"
+       $ splice 8 "[<7*2 0*2> 3 2 4] [4 .. 7]"
+       $ fast 8 $ randslice 8
+       $ s "1kpd:2"
+       # speed "[1, 1.02]"
+
+
+
+  setcps(30/120/2)

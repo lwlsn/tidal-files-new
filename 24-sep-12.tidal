@@ -1,0 +1,185 @@
+setcps(137/120/2)
+
+-- friday 13th
+
+let modify p = rarely (jux (rev.(#hpf "200"))) $
+                every 5 (#hpf "200 400 800 1.2e3") $
+                every 6 (# coarse "{32 24 16 12 8 }%16") $
+                every 7 (# accelerate "-0.2 0.2") $
+                every 10 ((# crush 8)) $ p
+
+
+d1 $ note "c4*4" # s "midi1"
+
+d2 $ s "k*4" # nudge (0.21)
+
+
+d3 $ note "{cs5 _ a4 b4 gs4 <a4 a5> e4 _ }%1" # s "midi3"
+|- note 4
+
+d4
+$ slow "1 0.5"
+$ someCyclesBy 0.5 rev
+$ (1 ~>)
+$ note "<fs4 d4 e4 d4 fs4 a4 e4 d4 >*<8 16>?" # s "midi6"
+|- note 4
+
+
+d2
+$ note "{fs4 ~ d4 ~  e4 ~  d4 ~ }%1"
+# s "midi2"
+|- note 4
+
+
+do
+  let kickPat = "{1 ~ <~ 1>  <1 ~> ~!2 1 ~!3 1 1 ~!2 1 ~!3 1 1 ~!2 1 ~!5 1 ~!3}%8"
+      hPat = "{1!3 ~!3 1 ~!2 1 ~!5 1 ~!2 1 ~ 1 ~ 1 ~!2 1 ~!2 1!2 ~!2  1 ~  }%16"
+  d5
+    $ rarely (modify)
+    $ almostNever (chunk 4 (hurry 2))
+    $ stack [
+    struct (kickPat) $ s "[sfe-kd:15,sfe-kd:4]"  # shape 0.62  #gain 0.8,
+    rarely (ply "2 4 8") $
+      stack [
+        struct "~ ~ 1 ~ " $ s "sfe-cp:0" #gain 0.8   # speed "[0.8, 0.82]",
+        struct (hPat) $ s "incoming:3" #up (choose [0]) # sus 0.09 # rel 0.1 # gain 0.6
+        ]
+    ]
+    |* gain 0.7 # nudge 0.21
+    # speed "[1,1.02]"
+    -- #hpf 300
+    # phasdp (range 0.1 0.2 $ slow 8 $ sine)
+    # phaserrate (range 0.1 0.2 $ slow 8 $ sine)
+
+
+-- variation 1 ..
+d1
+-- $ slow "1"
+-- $ someCyclesBy 0.15 rev
+-- $ (0.25 <~ )
+-- $ someCyclesBy 0.05 (iter 8)
+$ degradeBy 0.5
+$ sometimes (off 0.125 (|+ note "<12>"))
+$ rarely (off 0.25 (|+ note "<7 -12>"))
+$ seqPLoop [
+  (0,4,
+     note  "{<[fs3, fs4] [d3, d4] > cs5 a5 <[fs3, fs4] [d3, d4]> ~ a5 d5 cs5 }%4" ),
+  (4,8,
+    note  "{[e3, e4] cs5 d5 [e3, e4] cs5 d5 cs5 a4 [d3,d4,a4] cs5 e5 [d3,d4] a4 e5 d5 cs5}%4")
+]
+# s "midi1"
+|+ note 8
+
+
+
+d6
+  -- $ rarely (modify)
+  $ loopAt "4"
+  $ splice 32 "0..31" $ s "aph:0"
+  # speed "[1, 1.02]"
+  # gain 0.8 # nudge (0.21)
+
+
+  -- variation 2..
+  d1 $ slow "1"
+  $ seqPLoop [
+  (0,4,  sometimes (off 0.125 (|+ note "<12 0 7 -12>"))
+    $ note  "{<[fs3, fs4] [d3, d4] > cs5 a5 <[fs3, fs4] [d3, d4]> ~ a5 d5 cs5 }%4" ),
+  (4,8,  rarely (off 0.125 (|+ note "<12 0 7 -12>"))
+    $ note  "{[e3, e4] cs5 d5 [e3, e4] cs5 d5 cs5 a4 [d3,d4,a4] cs5 e5 [d3,d4] a4 e5 d5 cs5}%4"),
+    (8,12,  sometimes (off 0.125 (|+ note "<12 0 7 -12>"))
+     $ note  "{[fs3, fs4, cs5] ~ cs6 [fs3, fs4]  ~ d6 cs6 a5 [a3,a4, a5] ~ e6 [a3,a4, a5] ~ e6 d6 cs6}%4" ),
+   (12,16,  often (off 0.125 (|+ note "<12 0 7 -12>"))
+      $ note  "{[e3, e4,e5] ~ cs6 [e3, e4] ~ cs6  a5 b5 [d3,d4,a4] cs5 e5 [d3,d4] a4 e5 d5 cs5}%4")
+  ]
+  # s "midi1"
+  |+ note "-4 8"
+
+
+  d5
+     $ whenmod 24 22 (const $ s "sfe-kd:4*16?" # speed "[1, 1.02]" # shape 0.89 # gain 0.74) -- #orbit 7 # pan 7 # nudge 0.14)
+     $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+     -- $ ( # fshift (range 10 100 $ slow 16 $ sine))
+      $ rarely (ply 4) $ sometimes (chunk 4 (hurry 2))
+     $ stack [
+         whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,  -- # orbit 3 # pan 3,
+         fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78, -- #orbit 4 # pan 4,
+         sometimes (fast "2 1") $ s "sfe-kd:2*4"  # speed "[0.6, 0.62]" # shape 0.52 , -- # orbit 5 # pan 5,
+         loopAt 8 $ splice 32 "0..31" $ s "svlng:3" # gain 1.1 -- # orbit 6 # pan 6
+         ]
+         |*| gain 0.7 # nudge (0.21)
+
+
+
+do
+  d5
+    $ whenmod 24 22 (const $ s "sfe-kd:4*16?" # speed "[1, 1.02]" # shape 0.89 # gain 0.74) -- #orbit 7 # pan 7 # nudge 0.14)
+    $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+    -- $ ( # fshift (range 10 100 $ slow 16 $ sine))
+      $ rarely (ply 4) $ sometimes (chunk 4 (hurry 2))
+      $ stack [
+        whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,  -- # orbit 3 # pan 3,
+        -- fast 4 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78, -- #orbit 4 # pan 4,
+        -- sometimes (fast "2 1") $ s "sfe-kd:2*4"  # speed "[0.6, 0.62]" # shape 0.62 , -- # orbit 5 # pan 5,
+        loopAt 8 $ splice 32 "0..31" $ s "svlng:3" # gain 1.1 -- # orbit 6 # pan 6
+        ]
+        |*| gain 0.7 # nudge (0.21)
+  d6
+    -- $ rarely (modify)
+    $ loopAt "4"
+    $ splice 32 "0..31" $ s "aph:2"
+    # speed "[1, 1.02]"
+    # gain 0.9 # nudge (0.21)
+
+
+    -- variation 2..
+    d1 $ slow "1"
+    $ degradeBy  0.5
+    $ seqPLoop [
+    (0,4,  sometimes (off 0.125 (|+ note "<12 0 7 -12>"))
+      $ note  "{<[fs3, fs4] [d3, d4] > cs5 a5 <[fs3, fs4] [d3, d4]> ~ a5 d5 cs5 }%4" ),
+    (4,8,  rarely (off 0.125 (|+ note "<12 0 7 -12>"))
+      $ note  "{[e3, e4] cs5 d5 [e3, e4] cs5 d5 cs5 a4 [d3,d4,a4] cs5 e5 [d3,d4] a4 e5 d5 cs5}%4"),
+      (8,12,  sometimes (off 0.125 (|+ note "<12 0 7 -12>"))
+       $ note  "{[fs3, fs4, cs5] ~ cs6 [fs3, fs4]  ~ d6 cs6 a5 [a3,a4, a5] ~ e6 [a3,a4, a5] ~ e6 d6 cs6}%4" ),
+     (12,16,  often (off 0.125 (|+ note "<12 0 7 -12>"))
+        $ note  "{[e3, e4,e5] ~ cs6 [e3, e4] ~ cs6  a5 b5 [d3,d4,a4] cs5 e5 [d3,d4] a4 e5 d5 cs5}%4")
+    ]
+    # s "midi1"
+    |+ note "-4"
+
+
+
+d3 silence
+
+
+
+
+
+
+
+
+d6 $ note "{fs4 [~ fs4] ~ fs4 ~ [c4 c4] ~ c4 ~ [c4 c4] ~}%4" # s "midi6"
+|- note 4
+
+
+
+---
+
+d6
+  -- $ rarely (modify)
+  $ loopAt "4"
+  $ splice 32 "0..31" $ s "aph:0"
+  # speed "[1, 1.02]"
+  # gain 0.9 # nudge (0.21)
+
+d1
+  $ almostNever (modify)
+  $ loopAt "4"
+  $ splice 16 "0..15"
+  -- $ splice "<16>" "[[0 2] [1 3] [4 6] [5 7] [8 9] 10*2 < 11*2 12*4>]/2"
+  $ s "sadboi"
+  # speed "[1,1.02]"
+  # phasdp (range 0.1 0.2 $ slow 8 $ sine)
+   #phaserrate (range 0.1 0.2 $ slow 8 $ sine)
+   |*| gain 1.1

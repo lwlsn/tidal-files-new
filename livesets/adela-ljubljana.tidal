@@ -123,11 +123,11 @@ xfadeIn 2 8
 
 
 do
-    let legatoVal = "<2>"
+    let legatoVal = "<1>"
     xfadeIn 1 16
         $ (# begin (choose [0,0.05..0.4]))
         $ spin 2
-        $ striate 8 -- add this in
+        -- $ striate 8 -- add this in
         $ loopAt "<8 8 16 16>"
         $ splice 32 "0..31"
         $ spreadf [(# speed "[1,1.02]").(ply "<2 4 8>")]

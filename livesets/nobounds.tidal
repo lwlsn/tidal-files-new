@@ -1,0 +1,340 @@
+setcps(131/120/2)
+
+isPrime 131
+
+all $ id
+
+
+
+nudgeAll (0.21)
+
+
+once $ cue "33"
+
+we are controlling lights too with the code
+
+-- floor white
+once $ cue "33"
+
+-- floor green to white
+once $ cue "34"
+
+-- angry red just drums
+once $ cue "40"
+
+-- static green
+once $ cue "43"
+
+-- floor wobble orange
+once $ cue "45"
+
+-- everything flickers green for a while then fades to black
+once $ cue "47"
+
+-- gradual fade out
+once $ cue "60"
+
+-- purple flicker
+once $ cue "66"
+
+-- cyan floor cans
+once $ cue "68"
+
+-- cyan floor cans with slow blackout
+once $ cue "71"
+
+-- everything flicker
+once $ cue "78"
+
+-- blackout
+once $ cue "80"
+
+d1 $ s "cp(3,8)"
+
+hush
+
+nudgeAll (0.21)
+
+d1 $ s "cp"
+
+
+d1
+-- $ ply 2
+$ s "~ <pent:12 pent:14>"
+# sus 0.24 # rel 0.24
+# begin (choose [0,0.02..0.8]) |* gain "1.1"
+
+d2
+  -- $ (# fshift (range 10 100 $ slow 8 $ sine))
+$  sometimes (chunk 4 (hurry 2))
+-- $ sometimes (ply 4)
+$ s "~ <dhi c*2>" #legato 0.36
+# lpf (range 1000 10000 $ slow 8 $ saw)
+
+all $ id
+
+d3
+$ fast 2
+$ ply 2
+$ s "~ <sfe-cp lcp*2>"
+# legato 1 # up (range 24 36$ slow 4 $ sine) # gain 0.98
+
+d4
+$ slow "1 "
+$ gain "0 1 0 [0 1] [0 1] 0 1 1" # n (irand 32)
+# sound "chin" #speed 0.6 # coarse 2 # gain 1.2
+
+d1 silence
+
+hush
+
+
+d1
+$ sometimes (fast 2)
+$ rarely (ply "2 4")
+ $ s "[jp(3,8)?]"
+# n (irand 8)
+# gain 0.9
+# speed "[1, 1.02, 0.98]"
+  # lpf (range 1000 10000 $ slow 8 $ saw)
+
+d3 silence
+
+
+
+all $ (# crush 3).(#squiz "1 0 2 0")
+
+all $ id
+
+d3
+$ stack [
+-- s "oh hh hh hh oh hh oh hh",
+s "{thom ~@15 ~ dhi tha dhi thom ~ ~  dhi tha dhi thom ~ ~ dhi tha dhi}%8"
+]
+# speed "[2 4 1 4 ]/4"
+# gain 0.89
+-- # cue "78"
+
+
+d1
+-- $ sometimes (ply 2)
+$ stack [
+s "sfe-cp ~ sfe-cp sfe-cp ~" # n 0 # legato 0.65 # gain 0.85,
+fast "1 0.5" $ s "dhi ta dhi na thom"
+]
+
+d2
+-- $ sometimes (modFunc)
+-- $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+--
+$ almostNever (chunk 4 (hurry 2))
+$ sometimes (iter 4)
+$ struct "[1 0 0 1 0 1 ~ <[0] [1]>]*2"
+  $ s "dhi" #legato 0.66
+  # gain 1
+  # lpf (range 100 500 $ slow 8 $ saw)
+
+
+all $ ( # fshift (range 10 100 $ slow 16 $ sine))
+
+d2
+   -- $ whenmod 24 22 (const $ s "sfe-kd:1*16?" # speed "[1, 1.02]"
+        -- # shape 0.89 # gain 0.78  # sus 0.24 # rel 0.34) -- #orbit 7 # pan 7 # nudge 0.14)
+   -- $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+   -- $ ( # fshift (range 10 100 $ slow 16 $ sine))
+    -- $ rarely (ply 4)
+    $ sometimes (chunk 4 (hurry 2))
+   $ stack [
+       whenmod 7 4 (iter 4 ) $ s "~ sfe-sn"  # n (choose [2,3,6]) # legato 2,  -- # orbit 3 # pan 3,
+       -- fast 2 $ s "lcp*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78 -- #orbit 4 # pan 4,
+       -- s "sfe-kd:1*8" # speed "[1, 1.02]"
+            -- # shape 0.89 # gain 0.78  # sus 0.24 # rel 0.34, -- # orbit 5 # pan 5,
+       loopAt 4 $ splice 32 "0..31" $ s "svlng:3" # gain 1.1 -- # orbit 6 # pan 6
+       ]
+       # sus 0.24 # rel 0.24
+       # lpf (range 1000 10000 $ slow 8 $ sine)
+       # lpq (range 0.1 0.4 $ slow 8 $ sine)
+
+do
+   d4
+     $ gain "1.3*8?"
+     # s "<pent:15 pent:16>"
+     # sus 0.24 # rel 0.24
+     # begin (choose [0,0.02..0.8]) |* gain "1.1"
+
+
+   d5
+     $ almostNever (modify)
+     $ rarely (ply 4)
+     $ s "gel*8?" # n (irand 8)
+     # up (randcat [0,3,5,2]) # shape 0.96
+     # sus 0.14 # rel 0.24
+     # coarse "2 4 8 12" |* gain "0.67"
+
+d2 silence
+
+do
+   all $ id
+   d2 $ s "<sfe-kw:2 sfe-kd>(3,8)"  # speed "[0.6, 0.62]" # gain 1.15 # shape 0.2
+   d3 $ silence
+   d1 $ silence
+
+
+d1
+  -- $ rarely (modify)
+  $ loopAt "1 2"
+  $ splice " <8 16>" (iter 8 "[0 [1 3] 2 3 6 [~ 3] 2*2 1]/2")
+  $ s "aph:7"
+  # speed "[1, 1.02]"
+  # gain 0.8 -- # nudge (-0.15)
+
+
+  all $ (#lpf "1200 200 400 800 24000 ").(chop 32 ).(#coarse 8)
+
+  all $ (#crush 4).(#squiz 2)
+
+
+-- more?
+
+all $ id
+
+
+do
+    d1
+    -- $ whenmod 24 22 (const $  s "sfe-kd:4*16" # speed "[1, 1.02]" # shape 0.69 # gain 1)
+    $ someCyclesBy 0.1 ( (#accelerate (slow 4 $ range 6 0 $ sine)).(#speed 0.5))
+    -- $ ( # fshift (range 10 100 $ slow 16 $ sine))
+    $ sometimes (modFunc)
+    $ stack [
+        whenmod 7 4 (iter 4 ) $ s "~ c"  # n (choose [2,3,6]) # legato 2,
+        fast 4 $ s "dhi*2" #legato 1  # up (range 24 36$ slow 4 $ sine) # gain 0.78,
+        sometimes (fast "2 1") $ s "sfe-kd:8*4"  # speed "[0.6, 0.62]",
+        loopAt 16 $ splice 32 "0..31" $ s "svlng:4" # gain 1.4
+        ]
+        |*| gain 1.1
+
+
+all $ (# djf (range 0.5 0.75 $ slow 8 $ sine)).(#pan "[0 1]/2")
+
+
+  d5
+    $ sometimes (slow "2 1 0.5 2")
+    $ s "sfe-kd:1*4"  # speed "[0.6, 0.62]"
+    # crush "10 8 7 4"  #gain 0.9
+    # accelerate  "0.4"
+
+
+
+
+
+d1 $ jux rev $ chop 8 $ s "sfe-cp:2"
+
+d3 $ chop 8 $ s "sfe-cp:1*2"
+# pan (rand)
+
+d5 silence
+
+all $ (# fshift (range 10 400 $ slow 16 $ saw))
+
+
+d1
+$ chunk 2 (hurry 2)
+$ s "<~ [~ lcp:3*2]> <sfe-sn:1 sfe-sn:2>"
+# speed "[4 1 2 0.5]/4"
+# gain 0.88
+
+
+
+do
+    all $ id
+    let mx = [1, 1]
+        kickPat = "{1 1 ~ 1 [~ 1] 1  ~ 1  }%8"
+    d5 $ silence
+    d2
+        $ every 8 (loopAt 2)
+        $ stack [
+            gain (kickPat) # s "sfe-kd:2*2" # shape 0.65 |* gain (mx!!0),
+            degradeBy 0.88 $ loopAt  "2!7 1" $ splice 32 "0..31" $ s "lbreak:0",
+            degradeBy 0.78 $ every 8 (loopAt 2) $ loopAt "4!7 2" $ splice 32 "0..31" $ s "lbreak:3",
+            slow 8 $ s "svpc" # n (irand 16),
+            loopAt 8 $ splice 32 "0..31" $ s "svlng:10" # speed "[1, 1.02]"
+        ]
+         # gain (mx!!0*0.8)
+
+d1 silence
+
+  d5 -- kick off first
+   $ sometimes (slow "2 1 0.5 2")
+   $ s "[hbass, dhi, c]*8?"
+   # sus 0.2 # rel 0.2
+   # speed "[0.6, 0.62]"
+   # crush "10 8 7 4"  #gain 0.97
+   -- # accelerate  "0.4"
+
+do
+     let whenmod' n s e = when ( (\c -> (c >= s) && (c < e)).(`mod` n) )
+     all $ id
+     d3 $ silence
+     let mx = [1, 1]
+     d1
+       $ every 2 (within (0.25, 0.75) $ (# delay 0.5))
+       $ whenmod 24 22 (|*| gain 0)
+       -- $ degradeBy 0.04
+       -- $ modFunc
+       $ stack [
+         -- slow 2 $ gain "[1 0.8/2] 1 ~ 1 [~ 1/2] 1 ~ 1/3"
+          -- # sound "[sfe-kd:5(1,8), 909]" # speed 0.8  # shape 0.4,
+         -- gain "~ ~ 1 ~ ~ ~  1 ~" # sound "[sfe-sn]" # n (irand 8)
+          -- # speed 0.8 #legato 1.2 # coarse "<4 6 8>" # shape 0.2 # gain 0.95,
+         gain "0 1 0 [0 1] [0 1] 0 1 1" # sound "chin:1" # speed 0.6 # coarse 2 # gain 1.2
+       ] # delaytime (0.5/3) # delayfeedback 0.5 # orbit "0" |*| gain (mx!!0*0.9)
+     d4
+       $ whenmod' 24 12 16 (|*| gain 0)
+       $ stut' 3 0.125 (*| speed "0.5")
+       $ fast "0.5 1 0.25 0.5" $ gain 1.05 # sound "csubs:1"
+       # shape 0.27 #speed "<[1, 1.02] [2, 2.02]>" # coarse 2 # up (-3)  |*| gain (mx!!1*0.8)
+
+d4 silence
+
+-- ok some new textures here??
+    all $ id
+
+
+d2
+$ soak 4 (|+ note "7")
+-- $ degradeBy 0.25
+$ almostNever (ply 4) $ sometimes (chunk 4 (hurry 2))
+$ stack [
+                                    off 0.25 (|+ note "<7 -12>") $
+                                    jux rev $ chop "<8 6>" $
+                                    sound "hjdsynth:1"
+                                    |* speed 2
+                                    # gain 0.998
+                                   ]
+                                   # speed (slow 1.1 "1 2")
+                                   -- # crush "[6 2 3]/3"
+
+
+d2 silence
+
+d1
+$ rarely (ply 2)
+$ sometimes (chunk 4 (hurry 2))
+$ degradeBy 0.2
+$ s "{thom _@15 dhi thom thom dhi thom _ dhi thom thom dhi thom _ dhi thom thom dhi}%8"
+# gain 1.1
+
+d3 $ stack [
+ s "{dhi thom thom:1 dhi:1 dhi thom thom:1 dhi:1 thom _ _ _ }%8",
+ s "{dhi thom thom:1 dhi:1 thom _}%8"
+ ]
+# gain 1.1
+# speed (slow 1.1 "1 2")
+
+all $ (#accelerate  "-0.25")
+
+
+d5
+$ loopAt "<16>"
+$ splice 32 "0..31" $ s "[lost-drums:2, lost-drums:3]"
+# speed (slow 1.1 "1 2") # gain 1.2
